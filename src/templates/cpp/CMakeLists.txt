@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(templates_cpp LANGUAGES NONE)
 
-include("${PROJECT_ROOT}/.build/Zip.cmake")
+include("${PROJECT_ROOT}/.build/zip.cmake")
 
 # Aggregate target for all C++ template ZIPs.
 add_custom_target(cpp_templates_zip ALL)

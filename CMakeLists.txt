@@ -1,7 +1,7 @@
 # CMakeLists.txt
 
 cmake_minimum_required(VERSION 3.10)
-project(vs_templates LANGUAGES NONE)
+project(tpl_build LANGUAGES NONE)
 
 set(PROJECT_ROOT "${CMAKE_SOURCE_DIR}")
 include("${PROJECT_ROOT}/.build/dispatch.cmake")
