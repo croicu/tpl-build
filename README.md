@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository builds **Visual Studio solution/project templates** with a **ZIP‑first** workflow.
+This repository builds **project templates** with a **ZIP‑first** workflow.
 
 The core idea is simple:
 
