@@ -8,9 +8,17 @@ The core idea is simple:
 
 - Templates are **plain files**.
 - What you see in the template folder is **exactly what gets deployed** when you click *New Project* in Visual Studio (minus token substitution).
-- Packaging is a **pure transformation step** (zip + install), not a build of user code.
+- Packaging is a **pure transformation step** (ZIP creation and layout), not a build of user code.
 
-Visual Studio is treated as a **deployment UX**, not the identity of the system.
+Visual Studio is treated as a **deployment UX**, not the identity of the system.   
+This repository is a **builder** only.
+
+It produces template artifacts (ZIPs). It does **not**:
+- instantiate projects
+- register templates with an IDE
+- run user code
+
+**Current scope:** Windows templates only (Linux / Qt planned).
 
 ---
 
