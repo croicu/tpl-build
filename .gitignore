@@ -1,0 +1,6 @@
+.env/local.env
+.vs/
+build/
+obj/
+out/
+TestResults/

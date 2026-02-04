@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <Arch Condition="'$(Arch)' == ''">x64</Arch>
+    <Platform Condition="'$(Platform)' == ''">$(Arch)</Platform>
+    <Platforms>AnyCPU;x86;x64</Platforms>
+
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..'))\</RepoRoot>
+    <BuildRoot>$(RepoRoot)build\$(Platform)\$(Configuration)\dotnet\</BuildRoot>
+
+    <BaseOutputPath>$(BuildRoot)bin\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(BuildRoot)obj\</BaseIntermediateOutputPath>
+
+    <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)$(MSBuildProjectName)\</MSBuildProjectExtensionsPath>
+  </PropertyGroup>
+</Project>

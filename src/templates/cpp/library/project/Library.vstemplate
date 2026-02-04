@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>Croicu C++ Library</Name>
+    <Description>Creates a modern C++ library for cross-platform development.</Description>
+    <Icon>Library.ico</Icon>
+    <ProjectType>VC</ProjectType>
+    <LanguageTag>cpp</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <PlatformTag>linux</PlatformTag>
+    <ProjectTypeTag>library</ProjectTypeTag>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>a8a2447e-19b2-46dc-a9c9-3cfc0d5b9829</TemplateID>
+    <CreateNewFolder>false</CreateNewFolder>
+    <DefaultName>Library</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="Library.vcxproj" TargetFileName="$safeprojectname$.vcxproj" ReplaceParameters="true">
+      <Folder Name=".vscode" TargetFolderName=".vscode">
+        <ProjectItem ReplaceParameters="true" TargetFileName="launch.json">launch.json</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="settings.json">settings.json</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="tasks.json">tasks.json</ProjectItem>
+      </Folder>
+      <Folder Name=".cmake" TargetFolderName=".cmake">
+        <ProjectItem ReplaceParameters="true" TargetFileName="sources.generated.cmake">sources.generated.cmake</ProjectItem>
+      </Folder>
+      <Folder Name="include" TargetFolderName="include">
+        <ProjectItem ReplaceParameters="true" TargetFileName="library.h" OpenInEditor="true">library.h</ProjectItem>
+      </Folder>
+      <Folder Name="src" TargetFolderName="src">
+        <ProjectItem ReplaceParameters="true" TargetFileName="library.cpp" OpenInEditor="true">library.cpp</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$.vcxproj.filters">Library.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="CMakeLists.txt">CMakeLists.txt</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="build.bat">build.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="build.sh">build.sh</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

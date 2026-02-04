@@ -1,0 +1,65 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "win: build debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["build", "debug", "x64"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: rebuild debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["rebuild", "debug", "x64"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: clean debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["clean", "debug", "x64"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: test debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["test", "debug", "x64"],
+      "problemMatcher": [],
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: register debug x64 (experimental)",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["register", "debug", "x64", "--experimental"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+        "label": "win: build register debug x64",
+        "dependsOn": [
+            "win: build debug x64",
+            "win: register debug x64"
+        ],
+        "dependsOrder": "sequence",
+        "group": "build",
+    },
+    {
+      "label": "win: build runner debug x64",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}\\tests\\dotnet\\runner\\Runner.csproj", "--no-restore", "-c", "debug", "/p:Arch=x64"],
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

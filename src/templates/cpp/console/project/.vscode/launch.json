@@ -1,0 +1,92 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    /* =========================
+       WINDOWS
+       ========================= */
+    {
+      "name": "win: run debug x64",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/x64/Debug/bin/$safeprojectname$.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal",
+      "preLaunchTask": "win: build debug x64"
+    },
+    {
+      "name": "win: run debug x86",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/x86/Debug/bin/$safeprojectname$.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal",
+      "preLaunchTask": "win: build debug x86"
+    },
+    {
+      "name": "win: run release x64",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/x64/Release/bin/$safeprojectname$.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal",
+      "preLaunchTask": "win: build release x64"
+    },
+    {
+      "name": "win: run release x86",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/x86/Release/bin/$safeprojectname$.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal",
+      "preLaunchTask": "win: build release x86"
+    },
+
+    /* =========================
+       LINUX / WSL
+       ========================= */
+    {
+      "name": "linux: run debug x64",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/x64/Debug/bin/$safeprojectname$",
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "externalConsole": false,
+      "preLaunchTask": "linux: build debug x64"
+    },
+    {
+      "name": "linux: run debug x86",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/x86/Debug/bin/$safeprojectname$",
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "externalConsole": false,
+      "preLaunchTask": "linux: build debug x86"
+    },
+    {
+      "name": "linux: run release x64",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/x64/Release/bin/$safeprojectname$",
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "externalConsole": false,
+      "preLaunchTask": "linux: build release x64"
+    },
+    {
+      "name": "linux: run release x86",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/x86/Release/bin/$safeprojectname$",
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "externalConsole": false,
+      "preLaunchTask": "linux: build release x86"
+    }
+  ]
+}
