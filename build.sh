@@ -32,7 +32,7 @@ while [[ $# -gt 0 ]]; do
         gcc|clang) TOOLCHAIN="$1" ;;
         --cmake:*) EXTRA_CMAKE_ARGS+=("${1#--cmake:}") ;;
         --cmake-build:*) EXTRA_CMAKE_BUILD_ARGS+=("${1#--cmake-build:}") ;;
-        *) die "unrecognized argument '$1'" ;;
+        *) die() { echo "ERROR: $*" >&2; exit 1; } ;;
     esac
     shift
 done

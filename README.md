@@ -1,8 +1,8 @@
-# vs-templates
+# tpl-build
 
 ## Overview
 
-This repository builds **Visual Studio solution/project templates** with a **ZIP‑first** workflow and an **optional VSIX installer**.
+This repository builds **Visual Studio solution/project templates** with a **ZIP‑first** workflow.
 
 The core idea is simple:
 
@@ -39,22 +39,11 @@ The contents of `project/` are deployed verbatim when the template is instantiat
 - Installation is done by copying ZIPs into the Visual Studio Templates folder
 - ZIP build has **no dependency on Visual Studio**
 
----
-
-### 3. VSIX is optional and best‑effort
-
-- VSIX exists only as a **convenience installer**
-- No code‑behind, no VSPackage
-- If Visual Studio SDK / extension tools are missing:
-  - ZIPs still build
-  - VSIX is silently skipped (unless explicitly requested)
-
----
 
 ## Repository Structure
 
 ```
-vs-templates/
+tpl-build/
 ├─ build.bat
 ├─ build.sh
 ├─ README.md
@@ -65,7 +54,7 @@ vs-templates/
 │        ├─ CMakeLists.txt        # centralized packaging logic
 │        ├─ console/
 │        │  └─ project/           # template payload (1:1 deployed)
-│        ├─ gui/
+│        ├─ win32/
 │        │  └─ project/
 │        ├─ library/
 │        │  └─ project/
@@ -86,7 +75,7 @@ Only the **non‑`project/`** `CMakeLists.txt` files participate in building thi
 - The project is **language‑less**:
 
 ```cmake
-project(vs_templates LANGUAGES NONE)
+project(tpl_build LANGUAGES NONE)
 ```
 
 - CMake is used only to:
@@ -114,20 +103,8 @@ Behavior:
 - `build`, `build build`
   - always builds ZIP templates
   - installs ZIPs to `out/`
-  - attempts VSIX build **only if prerequisites exist**
-- `build zip`
-  - ZIP only
-- `build vsix`
-  - ZIP first
-  - VSIX **must succeed** or the build fails
-
-VSIX build details:
-
-- Uses **MSBuild**
-- Calls `vcvarsall.bat` only if `msbuild` is not already available
-- Requires Visual Studio SDK targets (`Microsoft.VsSDK.targets`)
-
-Missing VSIX prerequisites are **not warnings** unless VSIX is explicitly requested.
+- `build test`
+  - runs the test suite (requires net10)
 
 ---
 
@@ -135,12 +112,6 @@ Missing VSIX prerequisites are **not warnings** unless VSIX is explicitly reques
 
 - ZIP‑only build
 - Always works
-- Emits a single warning:
-
-```
-WARNING: VSIX packaging is not supported in build.sh.
-         Only ZIP templates will be built.
-```
 
 No probing, no branching.
 
@@ -159,7 +130,7 @@ No probing, no branching.
 
 Duplication inside template payloads is expected.
 
-A future `vs‑templates‑generator` will:
+A future `tpl‑generator` will:
 
 - generate `src/templates/**/project/**` trees
 - overwrite payload freely
@@ -174,7 +145,7 @@ No refactors required when the generator arrives.
 
 ## Summary
 
-- ZIP‑first, VSIX‑optional
+- ZIP‑first
 - Cross‑platform for core artifacts
 - Deterministic, quiet builds
 - Clear separation between:
