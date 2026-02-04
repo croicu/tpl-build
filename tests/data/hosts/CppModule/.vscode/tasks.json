@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "win: build debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["debug", "x64"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: build debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["debug", "x64"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>Croicu C++ Win32 GUI Application</Name>
+    <Description>Native Win32 GUI application.</Description>
+    <Icon>Desktop.ico</Icon>
+    <ProjectType>VC</ProjectType>
+    <LanguageTag>cpp</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>310785a6-be77-4bde-9eeb-f5e12d773f52</TemplateID>
+    <CreateNewFolder>false</CreateNewFolder>
+    <DefaultName>Desktop</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="Win32.vcxproj" TargetFileName="$safeprojectname$.vcxproj" ReplaceParameters="true">
+      <Folder Name=".vscode" TargetFolderName=".vscode">
+        <ProjectItem ReplaceParameters="true" TargetFileName="launch.json">launch.json</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="settings.json">settings.json</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="tasks.json">tasks.json</ProjectItem>
+      </Folder>
+      <Folder Name=".cmake" TargetFolderName=".cmake">
+        <ProjectItem ReplaceParameters="true" TargetFileName="sources.generated.cmake">sources.generated.cmake</ProjectItem>
+      </Folder>
+      <Folder Name="src" TargetFolderName="src">
+        <ProjectItem ReplaceParameters="true" TargetFileName="winmain.cpp" OpenInEditor="true">winmain.cpp</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$.vcxproj.filters">Win32.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="CMakeLists.txt">CMakeLists.txt</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="build.bat">build.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="build.sh">build.sh</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

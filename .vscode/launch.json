@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Visual Studio (experimental)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "devenv.exe",
+            "args": ["/RootSuffix", "Exp"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "internalConsole"
+        },
+        {
+            "name": "Launch Test Runner",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/x64/Debug/dotnet/bin/x64/Debug/net10.0/Croicu.Templates.Test.Runner.exe",
+            "args": ["--arch", "x64", "--config", "Debug"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "preLaunchTask": "win: build runner debug x64"
+        }
+    ]
+}

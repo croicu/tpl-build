@@ -1,0 +1,30 @@
+[
+  {
+    "Name": "CppModuleHost",
+    "Dir": "CppModule",
+    "Files": [
+      { "FileName": "CMakeLists.txt", "Substitute": true },
+      { "FileName": "build.bat", "Substitute": true },
+      { "FileName": "build.sh", "Substitute": true },
+      { "FileName": ".vscode\\launch.json", "Substitute": true },
+      { "FileName": ".vscode\\settings.json", "Substitute": true },
+      { "FileName": ".vscode\\tasks.json", "Substitute": true },
+      { "FileName": "CppModuleHost\\CMakeLists.txt", "Substitute": true },
+      { "FileName": "CppModuleHost\\main.cpp", "Substitute": true }
+    ]
+  },
+  {
+    "Name": "CppLibraryHost",
+    "Dir": "CppLibrary",
+    "Files": [
+      { "FileName": "CMakeLists.txt", "Substitute": true },
+      { "FileName": "build.bat", "Substitute": true },
+      { "FileName": "build.sh", "Substitute": true },
+      { "FileName": ".vscode\\launch.json", "Substitute": true },
+      { "FileName": ".vscode\\settings.json", "Substitute": true },
+      { "FileName": ".vscode\\tasks.json", "Substitute": true },
+      { "FileName": "CppLibraryHost\\CMakeLists.txt", "Substitute": true },
+      { "FileName": "CppLibraryHost\\main.cpp", "Substitute": true }
+    ]
+  }
+]

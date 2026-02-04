@@ -1,0 +1,236 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // -----------------------
+    // WINDOWS: BUILD
+    // -----------------------
+    {
+      "label": "win: build debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["build", "debug", "x64"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: build release x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["build", "release", "x64"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: build debug x86",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["build", "debug", "x86"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: build release x86",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["build", "release", "x86"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+
+    // -----------------------
+    // WINDOWS: REBUILD
+    // -----------------------
+    {
+      "label": "win: rebuild debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["rebuild", "debug", "x64"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: rebuild release x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["rebuild", "release", "x64"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: rebuild debug x86",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["rebuild", "debug", "x86"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: rebuild release x86",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["rebuild", "release", "x86"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+
+    // -----------------------
+    // WINDOWS: CLEAN
+    // -----------------------
+    {
+      "label": "win: clean debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["clean", "debug", "x64"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: clean release x64",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["clean", "release", "x64"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: clean debug x86",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["clean", "debug", "x86"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "win: clean release x86",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "args": ["clean", "release", "x86"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+
+    // -----------------------
+    // LINUX/macOS: BUILD
+    // -----------------------
+    {
+      "label": "linux: build debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["build", "debug", "x64"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: build release x64",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["build", "release", "x64"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: build debug x86",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["build", "debug", "x86"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: build release x86",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["build", "release", "x86"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+
+    // -----------------------
+    // LINUX/macOS: REBUILD
+    // -----------------------
+    {
+      "label": "linux: rebuild debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["rebuild", "debug", "x64"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: rebuild release x64",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["rebuild", "release", "x64"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: rebuild debug x86",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["rebuild", "debug", "x86"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: rebuild release x86",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["rebuild", "release", "x86"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+
+    // -----------------------
+    // LINUX/macOS: CLEAN
+    // -----------------------
+    {
+      "label": "linux: clean debug x64",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["clean", "debug", "x64"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: clean release x64",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["clean", "release", "x64"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: clean debug x86",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["clean", "debug", "x86"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: clean release x86",
+      "type": "shell",
+      "command": "${workspaceFolder}/build.sh",
+      "args": ["clean", "release", "x86"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    }
+  ]
+}
