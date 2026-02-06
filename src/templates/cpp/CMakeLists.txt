@@ -14,3 +14,4 @@ templates_add_payload_zip(PACK_NAME cpp REL_DIR "console/project"  BUILD_ROOT "$
 templates_add_payload_zip(PACK_NAME cpp REL_DIR "module/project"   BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
 templates_add_payload_zip(PACK_NAME cpp REL_DIR "library/project"  BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
 templates_add_payload_zip(PACK_NAME cpp REL_DIR "win32/project"    BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "leetcode/project" BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
