@@ -107,7 +107,7 @@ namespace Croicu.Templates.Test.Core
 
             {
                 HostInfo hostInfo = TemplateHosts.GetByName(hostName);
-                string hostDir = Path.Combine(Context.TestDataDir, "hosts", hostInfo.Dir);
+                string hostDir = Path.Combine(Context.TestHostsDir, hostInfo.Dir);
 
                 TemplateInstantiator.Instantiate(hostDir, destDir, projectName, hostInfo.Files);
             }

@@ -36,8 +36,8 @@ namespace Croicu.Templates.Test.Core
         public static string OutBinDir => Path.Combine(OutDir, "bin");
         public static string OutLibDir => Path.Combine(OutDir, "lib");
 
+        public static string TestHostsDir => Path.Combine(RepoRoot, "tests", "hosts");
         public static string TestDataDir => Path.Combine(RepoRoot, "tests", "data");
-        public static string TestHostsDir => Path.Combine(TestDataDir, "hosts");
         public static string TestSettingsDir => Path.Combine(TestDataDir, "settings");
 
         public static string TestRoot => Path.Combine(BuildDir, "test");
