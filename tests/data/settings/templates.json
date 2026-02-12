@@ -22,7 +22,7 @@
   },
   {
     "Name": "CppWin32",
-    "FileName": "cpp.win32.project.zip",
+    "FileName": "cpp.gui.win32.project.zip",
     "Langage":  "cpp",
     "Type":  "Win32",
     "Files": [

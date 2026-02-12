@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(templates_dispatch LANGUAGES NONE)
 
 include("${PROJECT_ROOT}/.build/dispatch.cmake")
