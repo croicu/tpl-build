@@ -20,7 +20,6 @@ namespace Croicu.Templates.Test.Runner
                 string stagingDir = Path.Combine(Context.TestDir, templateInfo.Name + ".staging");
                 string destDir = Path.Combine(Context.TestDir, templateInfo.Name);
                 string exeName = templateInfo.Name + ".exe";
-                string pdbName = templateInfo.Name + ".pdb";
                 string exePath = Path.Combine(Context.TestTemplateOutBinDir, exeName);
                 bool shouldExecute = false;
 
@@ -29,12 +28,15 @@ namespace Croicu.Templates.Test.Runner
                 if (!Commands.Clean(stagingDir) ||
                     !Commands.Clean(destDir) ||
                     !Commands.Deploy(zipPath, stagingDir) ||
-                    !Commands.VerifyDeployed(stagingDir, templateInfo.Files) ||
+                    !Commands.VerifyDeployed(stagingDir, templateInfo.Files, false) ||
                     !Commands.InstantiateTemplate(stagingDir, destDir, templateInfo.Name, templateInfo.Files) ||
-                    !Commands.VerifyDeployed(destDir, templateInfo.Files) ||
-                    !Commands.Build(destDir) ||
-                    !Commands.VerifyBuilt(Context.TestTemplateOutBinDir, [exeName, pdbName]) ||
-                    (shouldExecute && !Commands.Execute(exePath)))
+                    !Commands.VerifyDeployed(destDir, templateInfo.Files, true) ||
+                    Commands.ShouldBuild(templateInfo.Name, templateInfo.Platforms) && 
+                    (
+                        !Commands.Build(destDir) ||
+                        !Commands.VerifyBuilt(Context.TestTemplateOutDir, templateInfo.BuiltFiles) ||
+                        (shouldExecute && !Commands.Execute(exePath))
+                    ))
                 {
                     return -1;
                 }

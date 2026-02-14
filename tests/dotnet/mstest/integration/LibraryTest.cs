@@ -22,33 +22,32 @@ namespace Croicu.Templates.Test.Integration
 
         [TestMethod]
         [DynamicData(nameof(TemplateSettings.GetLibrary), typeof(TemplateSettings))]
-        public void Execute(string templateName, string templateFileName, string hostName, TemplateFileInfo[] fileInfos)
+        public void Execute(string templateName, string templateFileName, string hostName, string[] platforms, TemplateFileInfo[] templateFiles, TemplateFileInfo[] builtFiles)
         {
             string destDir = GetDestDir(templateName);
             string stagingDir = GetStagingDir(templateName);
             string zipPath = Path.Combine(Context.OutTemplatesDir, templateFileName);
             string hostFileName = hostName + ".exe";
             string libName = templateName + ".lib";
-            string headerName = "library.h";
             string hostPath = Path.Combine(Context.TestOutBinDir, hostFileName);
 
             Assert.IsTrue(Commands.Clean(GetStagingDir(templateName)));
             Assert.IsTrue(Commands.Clean(GetDestDir(templateName)));
             Assert.IsTrue(Commands.Deploy(zipPath, stagingDir));
-            Assert.IsTrue(Commands.VerifyDeployed(stagingDir, fileInfos));
-            Assert.IsTrue(Commands.InstantiateTemplate(stagingDir, destDir, templateName, fileInfos));
-            Assert.IsTrue(Commands.VerifyDeployed(destDir, fileInfos));
-            Assert.IsTrue(Commands.Build(destDir));
-            Assert.IsTrue(Commands.VerifyBuilt(Context.TestTemplateOutLibDir, [libName]));
-            Assert.IsTrue(Commands.VerifyBuilt(Context.TestTemplateOutIncludeDir, [headerName]));
-            Assert.IsTrue(Commands.InstantiateHost(Context.TestDir, hostName, templateName));
-            Assert.IsTrue(Commands.VerifyDeployed(Context.TestDir, TemplateHosts.GetByName(hostName).Files));
-            Assert.IsTrue(Commands.Build(Context.TestDir));
-            Assert.IsTrue(Commands.VerifyBuilt(Context.TestOutBinDir, [hostFileName]));
-            Assert.IsTrue(Commands.VerifyBuilt(Context.TestOutLibDir, [libName]));
-            Assert.IsTrue(Commands.VerifyBuilt(Context.TestOutIncludeDir, [headerName]));
-            Assert.IsTrue(Commands.Execute(hostPath));
-
+            Assert.IsTrue(Commands.VerifyDeployed(stagingDir, templateFiles, false));
+            Assert.IsTrue(Commands.InstantiateTemplate(stagingDir, destDir, templateName, templateFiles));
+            Assert.IsTrue(Commands.VerifyDeployed(destDir, templateFiles, true));
+            if (Commands.ShouldBuild(templateName, platforms))
+            {
+                Assert.IsTrue(Commands.Build(destDir));
+                Assert.IsTrue(Commands.VerifyBuilt(Context.TestTemplateOutDir, builtFiles));
+                Assert.IsTrue(Commands.InstantiateHost(Context.TestDir, hostName, templateName));
+                Assert.IsTrue(Commands.VerifyDeployed(Context.TestDir, TemplateHosts.GetByName(hostName).Files, true));
+                Assert.IsTrue(Commands.Build(Context.TestDir));
+                Assert.IsTrue(Commands.VerifyBuilt(Context.TestOutDir, builtFiles));
+                Assert.IsTrue(Commands.Execute(hostPath));
+            }
+            
             // Clean up
             Commands.Clean(GetStagingDir(templateName));
             Commands.Clean(GetDestDir(templateName));
@@ -105,21 +104,6 @@ namespace Croicu.Templates.Test.Integration
             }
 
             return;
-        }
-
-        private void VerifyDeployed(TemplateFileInfo[] fileInfos, string stagingDir)
-        {
-            foreach (TemplateFileInfo fileInfo in fileInfos)
-            {
-                string filePath = Path.Combine(stagingDir, fileInfo.FileName);
-
-                if (File.Exists(filePath))
-                    Logger.LogMessage($"File {fileInfo.FileName}, exist.");
-                else
-                    Logger.LogMessage($"File {fileInfo.FileName}, not found");
-
-                Assert.IsTrue(File.Exists(filePath));
-            }
         }
 
         private bool CheckFiles(string destDir, TemplateInfo templateInfo)

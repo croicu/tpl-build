@@ -3,7 +3,7 @@
   <TemplateData>
     <Name>Croicu C++ Win32 GUI Application</Name>
     <Description>Native Win32 GUI application.</Description>
-    <Icon>Desktop.ico</Icon>
+    <Icon>Win32.ico</Icon>
     <ProjectType>VC</ProjectType>
     <LanguageTag>cpp</LanguageTag>
     <PlatformTag>windows</PlatformTag>

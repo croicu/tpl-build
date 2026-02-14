@@ -11,6 +11,11 @@
       { "FileName": ".vscode\\tasks.json", "Substitute": true },
       { "FileName": "CppModuleHost\\CMakeLists.txt", "Substitute": true },
       { "FileName": "CppModuleHost\\main.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "bin/CppModuleHost.exe", "Platforms": ["Windows"] },
+      { "FileName": "bin/CppModuleHost.pdb", "Platforms": ["Windows"] },
+      { "FileName": "bin/CppModuleHost", "Platforms": ["Linux"] }
     ]
   },
   {
@@ -25,6 +30,11 @@
       { "FileName": ".vscode\\tasks.json", "Substitute": true },
       { "FileName": "CppLibraryHost\\CMakeLists.txt", "Substitute": true },
       { "FileName": "CppLibraryHost\\main.cpp", "Substitute": true }
-    ]
+    ],
+    "BuiltFiles": [
+      { "FileName": "bin/CppLibraryHost.exe", "Platforms": ["Windows"] },
+      { "FileName": "bin/CppLibraryHost.pdb", "Platforms": ["Windows"] },
+      { "FileName": "bin/CppLibraryHost", "Platforms": ["Linux"] }
+     ]
   }
 ]

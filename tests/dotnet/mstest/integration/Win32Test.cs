@@ -22,7 +22,7 @@ namespace Croicu.Templates.Test.Integration
 
         [TestMethod]
         [DynamicData(nameof(TemplateSettings.GetWin32), typeof(TemplateSettings))]
-        public void Execute(string templateName, string templateFileName, string hostName, TemplateFileInfo[] fileInfos)
+        public void Execute(string templateName, string templateFileName, string hostName, string[] platforms, TemplateFileInfo[] templateFiles, TemplateFileInfo[] builtFiles)
         {
             string destDir = GetDestDir(templateName);
             string stagingDir = GetStagingDir(templateName);
@@ -34,12 +34,15 @@ namespace Croicu.Templates.Test.Integration
             Assert.IsTrue(Commands.Clean(GetStagingDir(templateName)));
             Assert.IsTrue(Commands.Clean(GetDestDir(templateName)));
             Assert.IsTrue(Commands.Deploy(zipPath, stagingDir));
-            Assert.IsTrue(Commands.VerifyDeployed(stagingDir, fileInfos));
-            Assert.IsTrue(Commands.InstantiateTemplate(stagingDir, destDir, templateName, fileInfos));
-            Assert.IsTrue(Commands.VerifyDeployed(destDir, fileInfos));
-            Assert.IsTrue(Commands.Build(destDir));
-            Assert.IsTrue(Commands.VerifyBuilt(Context.TestTemplateOutBinDir, [exeName, pdbName]));
-            
+            Assert.IsTrue(Commands.VerifyDeployed(stagingDir, templateFiles, false));
+            Assert.IsTrue(Commands.InstantiateTemplate(stagingDir, destDir, templateName, templateFiles));
+            Assert.IsTrue(Commands.VerifyDeployed(destDir, templateFiles, true));
+            if (Commands.ShouldBuild(templateName, platforms))
+            {
+                Assert.IsTrue(Commands.Build(destDir));
+                Assert.IsTrue(Commands.VerifyBuilt(Context.TestTemplateOutDir, builtFiles));
+            }
+                        
             // Clean up
             Commands.Clean(GetStagingDir(templateName));
             Commands.Clean(GetDestDir(templateName));
@@ -96,21 +99,6 @@ namespace Croicu.Templates.Test.Integration
             }
 
             return;
-        }
-
-        private void VerifyDeployed(TemplateFileInfo[] fileInfos, string stagingDir)
-        {
-            foreach (TemplateFileInfo fileInfo in fileInfos)
-            {
-                string filePath = Path.Combine(stagingDir, fileInfo.FileName);
-
-                if (File.Exists(filePath))
-                    Logger.LogMessage($"File {fileInfo.FileName}, exist.");
-                else
-                    Logger.LogMessage($"File {fileInfo.FileName}, not found");
-
-                Assert.IsTrue(File.Exists(filePath));
-            }
         }
 
         private bool CheckFiles(string destDir, TemplateInfo templateInfo)

@@ -49,13 +49,26 @@ namespace Croicu.Templates.Test.Core
             return true;
         }
 
-        public static bool VerifyDeployed(string destDir, TemplateFileInfo[] templateSettings)
+        private static string GetFileName(TemplateFileInfo file, bool isInstantiated)
+        {
+            if (isInstantiated)
+            {
+                return file.TargetFileName;
+            }
+            else
+            {
+                return file.FileName;
+            }
+        }
+
+        public static bool VerifyDeployed(string destDir, TemplateFileInfo[] files, bool isInstantiated)
         {
             Console.WriteLine($"[Info] Verifying: {destDir} ...");
 
-            foreach (TemplateFileInfo fileInfo in templateSettings)
+            foreach (TemplateFileInfo file in files)
             {
-                string filePath = Path.Combine(destDir, fileInfo.FileName);
+                string fileName = GetFileName(file, isInstantiated);
+                string filePath = Path.Combine(destDir, fileName);
 
                 if (File.Exists(filePath))
                 {
@@ -71,22 +84,54 @@ namespace Croicu.Templates.Test.Core
             return true;
         }
 
-        public static bool VerifyBuilt(string outDir, string[] fileNames)
+        public static bool ShouldBuild(string templateName, string[] platforms)
+        {
+            if (platforms.Length == 0)
+            {
+                Console.WriteLine($"[Info] Skipping build test for template {templateName} does not specify a target platform.");
+
+                return false;
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && platforms.Contains("Windows"))
+            {
+                Console.WriteLine($"[Info] Testing build for template {templateName} on platform: Windows.");
+
+                return true;
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && platforms.Contains("Linux"))
+            {
+                Console.WriteLine($"[Info] Testing build for template {templateName} on platform: Linux.");
+
+                return true;
+            }
+            else
+            {
+                Console.WriteLine($"[Info] Skipping build test for template {templateName} is not supported on this platform.");
+
+                return false;
+            }
+        }
+
+        public static bool VerifyBuilt(string outDir, TemplateFileInfo[] builtFiles)
         {
             Console.WriteLine($"[Info] Verifying: {outDir} ...");
 
-            foreach (string fileName in fileNames)
+            foreach (TemplateFileInfo file in builtFiles)
             {
-                string filePath = Path.Combine(outDir, fileName);
+                if (file.IsBuilt())
+                {
+                    string filePath = Path.Combine(outDir, file.FileName);
 
-                if (File.Exists(filePath))
-                {
-                    Console.WriteLine($"[Info]     Found file: {filePath}.");
-                }
-                else
-                {
-                    Console.WriteLine($"[Error]    File not found: {filePath}.");
-                    return false;
+                    if (File.Exists(filePath))
+                    {
+                        Console.WriteLine($"[Info]     Found file: {filePath}.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[Error]    File not found: {filePath}.");
+                        return false;
+                    }
                 }
             }
 
@@ -118,10 +163,27 @@ namespace Croicu.Templates.Test.Core
         public static bool Build(string destDir)
         {
             int exitCode;
+            string commandFileName;
+            string commandArgs;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                commandFileName = "cmd.exe";
+                commandArgs = $"/c build.bat {Context.Config.ToLower()} {Context.Arch}";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                commandFileName = "bash";
+                commandArgs = $"./build.sh {Context.Config.ToLower()} {Context.Arch}";
+            }
+            else
+            {
+                throw new PlatformNotSupportedException("Unsupported platform");
+            }
 
             Console.WriteLine($"[Info] Building: {destDir} ...");
 
-            exitCode = Builder.Build("cmd.exe", destDir, $"/c build.bat {Context.Config} {Context.Arch}");
+            exitCode = Builder.Build(commandFileName, destDir, commandArgs);
             if (exitCode != 0)
             {
                 Console.WriteLine($"[Error] Build failed, exit code: {exitCode}.");

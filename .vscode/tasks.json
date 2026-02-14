@@ -60,6 +60,66 @@
       "args": ["build", "${workspaceFolder}\\tests\\dotnet\\runner\\Runner.csproj", "--no-restore", "-c", "debug", "/p:Arch=x64"],
       "group": "build",
       "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "linux: build debug x64",
+      "type": "shell",
+      "command": "bash",
+      "args": ["${workspaceFolder}/build.sh", "build", "debug", "x64"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: rebuild debug x64",
+      "type": "shell",
+      "command": "bash",
+      "args": ["${workspaceFolder}/build.sh", "rebuild", "debug", "x64"],
+      "problemMatcher": "$msCompile",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: clean debug x64",
+      "type": "shell",
+      "command": "bash",
+      "args": ["${workspaceFolder}/build.sh", "clean", "debug", "x64"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: test debug x64",
+      "type": "shell",
+      "command": "bash",
+      "args": ["${workspaceFolder}/build.sh", "test", "debug", "x64"],
+      "problemMatcher": [],
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: register debug x64 (experimental)",
+      "type": "shell",
+      "command": "bash",
+      "args": ["${workspaceFolder}/build.sh", "register", "debug", "x64", "--experimental"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+        "label": "linux: build register debug x64",
+        "dependsOn": [
+            "linux: build debug x64",
+            "linux: register debug x64"
+        ],
+        "dependsOrder": "sequence",
+        "group": "build",
+    },
+    {
+      "label": "linux: build runner debug x64",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/tests/dotnet/runner/Runner.csproj", "--no-restore", "-c", "Debug", "/p:Arch=x64"],
+      "group": "build",
+      "problemMatcher": "$msCompile"
     }
   ]
 }

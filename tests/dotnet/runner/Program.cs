@@ -1,5 +1,6 @@
 ﻿using Croicu.Templates.Test.Core;
 using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 
 namespace Croicu.Templates.Test.Runner {
 
@@ -15,6 +16,13 @@ namespace Croicu.Templates.Test.Runner {
                 ["Module"]  = new ModuleRunner(),
                 ["Library"] = new LibraryRunner(),
             };
+
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) &&
+                !RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Console.WriteLine($"[Error] Unsupported platform: {RuntimeInformation.OSDescription}");
+                return -1;
+            }
 
             foreach (TemplateInfo templateInfo in TemplateSettings.LoadTemplates())
             {

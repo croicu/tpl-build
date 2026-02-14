@@ -14,7 +14,12 @@ namespace Croicu.Templates.Test.Runner
             Init (templateInfo);
             try
             {
-                return DoRun(templateInfo);
+                while(true)
+                {
+                    DoRun(templateInfo);
+                }
+
+                return 0;
             }
             finally
             {
@@ -26,7 +31,7 @@ namespace Croicu.Templates.Test.Runner
         {
             Context.Current.TestClassName = this.GetType().FullName;
             Context.Current.TestName = "Run";
-            Context.Current.TestTemplate = templateInfo.Name;
+            Context.Current.TestTemplate = "__" + templateInfo.Name + "__";
         }
 
         private void Done(TemplateInfo templateInfo)
