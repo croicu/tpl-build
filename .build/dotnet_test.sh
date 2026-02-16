@@ -1,11 +1,11 @@
 # ============================================================
-# dotnet_build.sh
+# dotnet_test.sh
 # Inputs:
 #   CMAKE_CONFIG = Debug|Release    (from build.sh)
 #   ARCH = x64|x86|arm|aarch64      (from build.sh)
 # ============================================================
 
-dotnet_check() {
+require_dotnet() {
     if ! command -v dotnet >/dev/null 2>&1; then
         echo ""
         echo "ERROR: .NET SDK is required for tests but 'dotnet' was not found."
@@ -17,10 +17,11 @@ dotnet_check() {
     return 0
 }
 
-dotnet_build() {
+dotnet_test() {
     export TEST_SOLUTION=tests/dotnet/Tests.sln
+    export RUNSETTINGS=tests/dotnet/mstest.runsettings
 
-    if ! dotnet build ${TEST_SOLUTION} -c "${CMAKE_CONFIG}" --nologo -p:Platform="${ARCH}"; then
+    if ! dotnet test ${TEST_SOLUTION} -c "${CMAKE_CONFIG}" --nologo --settings "${RUNSETTINGS}" -p:Platform="${ARCH}" --logger "trx;LogFileName=${RESULTS_DIR}/tests.trx"; then
         return 1
     fi
 

@@ -196,6 +196,7 @@ namespace Croicu.Templates.Test.Core
         public static bool Execute(string exePath)
         {
             string? exeDir = Path.GetDirectoryName(Path.GetFullPath(exePath));
+            var env = new Dictionary<string,string>();
 
             Console.WriteLine($"[Info] Executing: {exePath} ...");
             if (
@@ -207,7 +208,17 @@ namespace Croicu.Templates.Test.Core
                 return false;
             }
 
-            int exitCode = Executor.Execute(exePath, exeDir);
+            if (OperatingSystem.IsLinux())
+            {
+                var existing = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
+                
+                env["LD_LIBRARY_PATH"] =
+                    string.IsNullOrEmpty(existing)
+                        ? exeDir
+                        : $"{exeDir}:{existing}";
+            }
+
+            int exitCode = Executor.Execute(exePath, exeDir, null, env);
             if (exitCode != 0)
             {
                 Console.WriteLine($"[Error] Execute failed, executable: {exePath}, exit code: {exitCode}.");

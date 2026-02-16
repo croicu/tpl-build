@@ -46,7 +46,7 @@ namespace Croicu.Templates.Test.Integration
                     Assert.IsTrue(Commands.Execute(exePath));
                 }
             }
-                        
+
             // Clean up
             Commands.Clean(stagingDir);
             Commands.Clean(destDir);

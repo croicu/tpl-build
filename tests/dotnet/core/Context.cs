@@ -169,7 +169,7 @@ namespace Croicu.Templates.Test.Core
 
         private static readonly Lazy<Env> s_env = new(Create, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
         private static ILogger? s_logger = null;
-        public static readonly AsyncLocal<LocalContext?> s_current = new();
+        public static readonly ThreadLocal<LocalContext?> s_current = new();
 
         #endregion
 

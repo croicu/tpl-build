@@ -34,6 +34,9 @@ namespace Croicu.Templates.Test.Core
                 var destFilePath = Path.Combine(destDir, fileInfo.TargetFileName);
                 var destFileDir = Path.GetDirectoryName(destFilePath);
 
+                if (!File.Exists(srcFilePath))
+                    throw new FileNotFoundException($"Template file not found: '{srcFilePath}'");
+
                 if (!string.IsNullOrEmpty(destFileDir))
                     Directory.CreateDirectory(destFileDir);
 
@@ -68,7 +71,7 @@ namespace Croicu.Templates.Test.Core
 
                     try
                     {
-                        exitCode = Executor.Execute(wswhere, arguments, string.Empty, out stdout, out stderr);
+                        exitCode = Executor.Execute(wswhere, arguments, string.Empty, null, out stdout, out stderr);
                     }
                     catch (Exception ex)
                     {
@@ -125,7 +128,6 @@ namespace Croicu.Templates.Test.Core
 
         private static string ReadAll(string path)
         {
-            // detectEncodingFromByteOrderMarks preserves UTF-8/UTF-16/UTF-32 BOM detection.
             using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var sr = new StreamReader(fs, Encoding.ASCII);
 
@@ -136,7 +138,6 @@ namespace Croicu.Templates.Test.Core
 
         private static void WriteAll(string path, string text)
         {
-            // Preserve detected encoding. StreamWriter will emit BOM if the encoding uses one.
             using var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
             using var sw = new StreamWriter(fs, Encoding.ASCII);
 

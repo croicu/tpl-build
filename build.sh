@@ -90,31 +90,35 @@ fi
 # ------------------------------------------------------------
 BUILD_DIR="build/${ARCH}/${CMAKE_CONFIG}"
 INSTALL_DIR="out/${ARCH}/${CMAKE_CONFIG}"
+RESULTS_DIR="logs/tests/${ARCH}/${CMAKE_CONFIG}"
 
 BUILD_DIR_ABS="${REPO_ROOT}/${BUILD_DIR}"
 INSTALL_DIR_ABS="${REPO_ROOT}/${INSTALL_DIR}"
+RESULTS_DIR_ABS="${REPO_ROOT}/${RESULTS_DIR}"
 
 # ------------------------------------------------------------
 # Commands
 # ------------------------------------------------------------
 if [[ "$COMMAND" == "clean" ]]; then
-    rm -rf "$BUILD_DIR_ABS" "$INSTALL_DIR_ABS"
+    rm -rf "$BUILD_DIR_ABS" "$INSTALL_DIR_ABS" "$RESULTS_DIR_ABS"
     exit 0
 fi
 
 if [[ "$COMMAND" == "rebuild" ]]; then
-    rm -rf "$BUILD_DIR_ABS" "$INSTALL_DIR_ABS"
+    rm -rf "$BUILD_DIR_ABS" "$INSTALL_DIR_ABS" "$RESULTS_DIR_ABS"
 fi
 
 source "$REPO_ROOT/.build/cmake_build.sh"
 source "$REPO_ROOT/.build/dotnet_build.sh"
+source "$REPO_ROOT/.build/dotnet_test.sh"
 
 if [[ "$COMMAND" == "build" || "$COMMAND" == "rebuild" || "$COMMAND" == "test" ]]; then
-    build_cmake || exit 1
+    cmake_build || exit 1
 fi
 
 if [[ "$COMMAND" == "test" ]]; then
-    require_dotnet || exit 1
-    build_dotnet || exit 1
+    dotnet_check || exit 1
+    dotnet_build || exit 1
+    dotnet_test || exit 1
 fi
 

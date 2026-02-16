@@ -77,7 +77,7 @@
     ],
     "BuiltFiles": [
       { "FileName": "bin/$safeprojectname$.dll", "Platforms": ["Windows"], "Executable": true },
-      { "FileName": "bin/$safeprojectname$.so", "Platforms": ["Linux"], "Executable": true },
+      { "FileName": "bin/lib$safeprojectname$.so", "Platforms": ["Linux"], "Executable": true },
       { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] },
       { "FileName": "lib/$safeprojectname$.lib", "Platforms": ["Windows"] },
       { "FileName": "include/module.h", "Platforms": ["Windows", "Linux"] }
@@ -109,7 +109,7 @@
     "BuiltFiles": [
       { "FileName": "lib/$safeprojectname$.lib", "Platforms": ["Windows"], "Executable": true },
       { "FileName": "include/library.h", "Platforms": ["Windows", "Linux"] },
-      { "FileName": "lib/$safeprojectname$.a", "Platforms": ["Linux"] }
+      { "FileName": "lib/lib$safeprojectname$.a", "Platforms": ["Linux"] }
     ]
   }
 ]
