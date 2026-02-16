@@ -13,9 +13,14 @@
       { "FileName": "CppModuleHost\\main.cpp", "Substitute": true }
     ],
     "BuiltFiles": [
-      { "FileName": "bin/CppModuleHost.exe", "Platforms": ["Windows"] },
+      { "FileName": "bin/CppModuleHost.exe", "Platforms": ["Windows"], "Executable": true },
       { "FileName": "bin/CppModuleHost.pdb", "Platforms": ["Windows"] },
-      { "FileName": "bin/CppModuleHost", "Platforms": ["Linux"] }
+      { "FileName": "bin/CppModuleHost", "Platforms": ["Linux"], "Executable": true },
+      { "FileName": "bin/$safeprojectname$.dll", "Platforms": ["Windows"] },
+      { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] },
+      { "FileName": "bin/$safeprojectname$.so", "Platforms": ["Linux"] },
+      { "FileName": "lib/$safeprojectname$.lib", "Platforms": ["Windows"] },
+      { "FileName": "include/module.h", "Platforms": ["Windows", "Linux"] }
     ]
   },
   {
@@ -32,9 +37,15 @@
       { "FileName": "CppLibraryHost\\main.cpp", "Substitute": true }
     ],
     "BuiltFiles": [
-      { "FileName": "bin/CppLibraryHost.exe", "Platforms": ["Windows"] },
-      { "FileName": "bin/CppLibraryHost.pdb", "Platforms": ["Windows"] },
-      { "FileName": "bin/CppLibraryHost", "Platforms": ["Linux"] }
+      { "FileName": "bin/CppModuleHost.exe", "Platforms": ["Windows"] },
+      { "FileName": "bin/CppModuleHost.pdb", "Platforms": ["Windows"] },
+      { "FileName": "bin/CppModuleHost", "Platforms": ["Linux"] },
+      { "FileName": "bin/$safeprojectname$.dll", "Platforms": ["Windows"] },
+      { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] },
+      { "FileName": "bin/$safeprojectname$.so", "Platforms": ["Linux"] },
+      { "FileName": "include/module.h", "Platforms": ["Windows", "Linux"] },
+      { "FileName": "lib/$safeprojectname$.lib", "Platforms": ["Windows"] }
      ]
   }
 ]
+

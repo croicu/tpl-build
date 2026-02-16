@@ -32,11 +32,11 @@ namespace Croicu.Templates.Test.Integration
 
                 if (value.TestData != null)
                 {
-                    object? testTemplate = value.TestData.GetValue(0);
+                    TemplateInfo? testTemplate = value.TestData.GetValue(0) as TemplateInfo;
 
-                    if (testTemplate != null && testTemplate is string)
+                    if (testTemplate != null)
                     {
-                        Context.Current.TestTemplate = testTemplate as string;
+                        Context.Current.TestTemplate = "__" + testTemplate.Name + "__";
                     }
                 }
             }

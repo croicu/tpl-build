@@ -121,7 +121,7 @@ namespace Croicu.Templates.Test.Core
             {
                 if (file.IsBuilt())
                 {
-                    string filePath = Path.Combine(outDir, file.FileName);
+                    string filePath = Path.Combine(outDir, file.TargetFileName);
 
                     if (File.Exists(filePath))
                     {
@@ -195,13 +195,13 @@ namespace Croicu.Templates.Test.Core
 
         public static bool Execute(string exePath)
         {
-            string? exeDir = Path.GetDirectoryName(exePath);
+            string? exeDir = Path.GetDirectoryName(Path.GetFullPath(exePath));
 
             Console.WriteLine($"[Info] Executing: {exePath} ...");
             if (
                 String.IsNullOrWhiteSpace(exeDir) ||
                 !Directory.Exists(exeDir) ||
-                !File.Exists(exePath))
+                !File.Exists(Path.GetFullPath(exePath)))
             {
                 Console.WriteLine($"[Error] Executable not found: {exePath}.");
                 return false;

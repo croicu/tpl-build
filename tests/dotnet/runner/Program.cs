@@ -12,7 +12,7 @@ namespace Croicu.Templates.Test.Runner {
             var factories = new Dictionary<string, RunnerBase>(StringComparer.OrdinalIgnoreCase)
             {
                 ["Console"] = new ConsoleRunner(),
-                ["Win32"]   = new Win32Runner(),
+                ["GUI"]     = new GUIRunner(),
                 ["Module"]  = new ModuleRunner(),
                 ["Library"] = new LibraryRunner(),
             };

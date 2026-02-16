@@ -21,144 +21,46 @@ namespace Croicu.Templates.Test.Integration
         #region Test Methods
 
         [TestMethod]
-        [DynamicData(nameof(TemplateSettings.GetLibrary), typeof(TemplateSettings))]
-        public void Execute(string templateName, string templateFileName, string hostName, string[] platforms, TemplateFileInfo[] templateFiles, TemplateFileInfo[] builtFiles)
+        [DynamicData(nameof(TemplateSettings.GetLibraries), typeof(TemplateSettings))]
+        public void Execute(TemplateInfo templateInfo)
         {
-            string destDir = GetDestDir(templateName);
-            string stagingDir = GetStagingDir(templateName);
-            string zipPath = Path.Combine(Context.OutTemplatesDir, templateFileName);
-            string hostFileName = hostName + ".exe";
-            string libName = templateName + ".lib";
-            string hostPath = Path.Combine(Context.TestOutBinDir, hostFileName);
+            string zipPath = Path.Combine(Context.OutTemplatesDir, templateInfo.FileName);
+            string stagingDir = Path.Combine(Context.TestDir, templateInfo.Name + ".staging");
+            string destDir = Path.Combine(Context.TestDir, Context.Current.TestTemplate);
 
-            Assert.IsTrue(Commands.Clean(GetStagingDir(templateName)));
-            Assert.IsTrue(Commands.Clean(GetDestDir(templateName)));
+            Assert.IsTrue(Commands.Clean(stagingDir));
+            Assert.IsTrue(Commands.Clean(destDir));
             Assert.IsTrue(Commands.Deploy(zipPath, stagingDir));
-            Assert.IsTrue(Commands.VerifyDeployed(stagingDir, templateFiles, false));
-            Assert.IsTrue(Commands.InstantiateTemplate(stagingDir, destDir, templateName, templateFiles));
-            Assert.IsTrue(Commands.VerifyDeployed(destDir, templateFiles, true));
-            if (Commands.ShouldBuild(templateName, platforms))
+            Assert.IsTrue(Commands.VerifyDeployed(stagingDir, templateInfo.Files, false));
+            Assert.IsTrue(Commands.InstantiateTemplate(stagingDir, destDir, templateInfo.Name, templateInfo.Files));
+            Assert.IsTrue(Commands.VerifyDeployed(destDir, templateInfo.Files, true));
+
+            if (Commands.ShouldBuild(templateInfo.Name, templateInfo.Platforms))
             {
-                Assert.IsTrue(Commands.Build(destDir));
-                Assert.IsTrue(Commands.VerifyBuilt(Context.TestTemplateOutDir, builtFiles));
-                Assert.IsTrue(Commands.InstantiateHost(Context.TestDir, hostName, templateName));
-                Assert.IsTrue(Commands.VerifyDeployed(Context.TestDir, TemplateHosts.GetByName(hostName).Files, true));
+                HostInfo hostInfo = TemplateHosts.GetByName(templateInfo.HostName);
+
+                Assert.IsNotNull(hostInfo);
+                Assert.IsTrue(Commands.InstantiateHost(Context.TestDir, templateInfo.HostName, Context.Current.TestTemplate));
+                Assert.IsTrue(Commands.VerifyDeployed(Context.TestDir, hostInfo.Files, true));
                 Assert.IsTrue(Commands.Build(Context.TestDir));
-                Assert.IsTrue(Commands.VerifyBuilt(Context.TestOutDir, builtFiles));
-                Assert.IsTrue(Commands.Execute(hostPath));
+                Assert.IsTrue(Commands.VerifyBuilt(Context.TestOutDir, templateInfo.BuiltFiles));
+
+                if (hostInfo.Executable != null)
+                {
+                    string hostExePath = Path.Combine(Context.TestOutDir, hostInfo.Executable.TargetFileName);
+
+                    Assert.IsTrue(Commands.Execute(hostExePath));
+                }
             }
-            
+
             // Clean up
-            Commands.Clean(GetStagingDir(templateName));
-            Commands.Clean(GetDestDir(templateName));
+            Commands.Clean(stagingDir);
+            Commands.Clean(destDir);
         }
 
         #endregion
 
         #region Private Methods
-
-        private static string GetStagingDir(string templateName)
-        {
-            return Path.Combine(Context.TestDir, templateName + ".staging");
-        }
-
-        private static string GetDestDir(string templateName)
-        {
-            return Path.Combine(Context.TestDir, templateName);
-        }
-
-        private static bool Clean(String destDir)
-        {
-
-            if (Directory.Exists(destDir))
-            {
-                try
-                {
-                    Directory.Delete(destDir, true);
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogMessage($"Failed to delete {destDir}\nError: {ex.Message}.");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private void Deploy(string zipPath, string stagingDir)
-        {
-            Logger.LogMessage($"Start deploying {Path.GetFileName(zipPath)} template.");
-            Assert.IsTrue(File.Exists(zipPath));
-
-            try
-            {
-                TemplateExpander.ExpandToDirectory(zipPath, stagingDir);
-                TestContext.WriteLine($"Expanded: {zipPath} -> {stagingDir}");
-            }
-            catch (FileNotFoundException)
-            {
-                TestContext.WriteLine($"File not found: {zipPath}.");
-
-                return;
-            }
-
-            return;
-        }
-
-        private bool CheckFiles(string destDir, TemplateInfo templateInfo)
-        {
-            foreach (TemplateFileInfo fileInfo in templateInfo.Files)
-            {
-                string filePath = Path.Combine(destDir, fileInfo.FileName);
-
-                if (File.Exists(filePath))
-                {
-                    TestContext.WriteLine($"    Found file: {filePath}.");
-                }
-                else
-                {
-                    TestContext.WriteLine($"    File not found: {filePath}.");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private void Instantiate(TemplateInfo templateInfo, string stagingDir, string destDir)
-        {
-            TemplateInstantiator.Instantiate(stagingDir, destDir, templateInfo.Name, templateInfo.Files);
-        }
-
-        private int Build(string destDir)
-        {
-            int exitCode = Builder.Build("cmd.exe", destDir, "/c build.bat");
-
-            if (exitCode != 0)
-            {
-                TestContext.WriteLine($"Build failed, exit code: {exitCode}.");
-            }
-
-            return exitCode;
-        }
-
-        private int Execute(string exePath)
-        {
-            string? exeDir = Path.GetDirectoryName(exePath);
-
-            if (exeDir == null || !Directory.Exists(exeDir) || !File.Exists(exePath))
-                return -1;
-
-            int exitCode = Executor.Execute(exePath, exeDir);
-
-            if (exitCode != 0)
-            {
-                TestContext.WriteLine($"Execute failed, exit code: {exitCode}.");
-            }
-
-            return exitCode;
-        }
 
         #endregion
     }

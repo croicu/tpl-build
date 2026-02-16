@@ -1,12 +1,14 @@
-﻿using Croicu.Templates.Test.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Transactions;
+
+using Croicu.Templates.Test.Core;
+
 
 namespace Croicu.Templates.Test.Runner
 {
-    internal class LibraryRunner: RunnerBase
+    internal class GUIRunner: RunnerBase
     {
         protected override int DoRun(TemplateInfo templateInfo)
         {
@@ -15,7 +17,7 @@ namespace Croicu.Templates.Test.Runner
             if (enabled)
             {
                 string zipPath = Path.Combine(Context.OutTemplatesDir, templateInfo.FileName);
-                string stagingDir = Path.Combine(Context.TestDir, templateInfo.Name + ".staging");
+                string stagingDir = Path.Combine(Context.TestDir, Context.Current.TestTemplate + ".staging");
                 string destDir = Path.Combine(Context.TestDir, Context.Current.TestTemplate);
 
                 Console.WriteLine($"[Info] Testing: {templateInfo.Name}...");
@@ -28,7 +30,7 @@ namespace Croicu.Templates.Test.Runner
                     return -1;
                 if (!Commands.VerifyDeployed(stagingDir, templateInfo.Files, false))
                     return -1;
-                if (!Commands.InstantiateTemplate(stagingDir, destDir, Context.Current.TestTemplate, templateInfo.Files))
+                if (!Commands.InstantiateTemplate(stagingDir, destDir, templateInfo.Name, templateInfo.Files))
                     return -1;
                 if (!Commands.VerifyDeployed(destDir, templateInfo.Files, true))
                     return -1;
@@ -40,32 +42,12 @@ namespace Croicu.Templates.Test.Runner
                     if (!Commands.VerifyBuilt(Context.TestTemplateOutDir, templateInfo.BuiltFiles))
                         return -1;
 
-                    if (!string.IsNullOrEmpty(templateInfo.HostName))
+                    if (templateInfo.Executable != null)
                     {
-                        HostInfo hostInfo = TemplateHosts.GetByName(templateInfo.HostName);
+                        string exePath = Path.Combine(Context.TestTemplateOutDir, templateInfo.Executable.TargetFileName);
 
-                        if (hostInfo == null)
-                        {
-                            Console.WriteLine($"[Error] Host {templateInfo.HostName} not found.");
+                        if (!Commands.Execute(exePath))
                             return -1;
-                        }
-
-                        if (!Commands.InstantiateHost(Context.TestDir, templateInfo.HostName, Context.Current.TestTemplate))
-                            return -1;
-                        if (!Commands.VerifyDeployed(Context.TestDir, hostInfo.Files, true))
-                            return -1;
-                        if (!Commands.Build(Context.TestDir))
-                            return -1;
-                        if (!Commands.VerifyBuilt(Context.TestOutDir, templateInfo.BuiltFiles))
-                            return -1;
-
-                        if (hostInfo.Executable != null)
-                        {
-                            string hostExePath = Path.Combine(Context.TestOutDir, hostInfo.Executable.TargetFileName);
-
-                            if (!Commands.Execute(hostExePath))
-                                return -1;
-                        }
                     }
                 }
 
@@ -78,5 +60,10 @@ namespace Croicu.Templates.Test.Runner
 
             return 0;
         }
+
+        #region Private Methods
+
+        #endregion
+
     }
 }

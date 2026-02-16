@@ -12,16 +12,16 @@ namespace Croicu.Templates.Test.Integration
 
     [TestClass]
     [TestCategory("Intergation")]
-    public class ConsoleTest: TestBase
+    public class GUITest: TestBase
     {
-        public ConsoleTest(): base()
+        public GUITest(): base()
         {
         }
 
         #region Test Methods
 
         [TestMethod]
-        [DynamicData(nameof(TemplateSettings.GetConsoles), typeof(TemplateSettings))]
+        [DynamicData(nameof(TemplateSettings.GetGUIs), typeof(TemplateSettings))]
         public void Execute(TemplateInfo templateInfo)
         {
             string zipPath = Path.Combine(Context.OutTemplatesDir, templateInfo.FileName);
@@ -46,7 +46,7 @@ namespace Croicu.Templates.Test.Integration
                     Assert.IsTrue(Commands.Execute(exePath));
                 }
             }
-                        
+
             // Clean up
             Commands.Clean(stagingDir);
             Commands.Clean(destDir);

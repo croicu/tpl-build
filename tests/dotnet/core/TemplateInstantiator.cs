@@ -89,6 +89,11 @@ namespace Croicu.Templates.Test.Core
 
         internal static string Substitute(string input)
         {
+            if (string.IsNullOrEmpty(Context.Current.TestTemplate))
+            {
+                throw new ApplicationException($"Current.TestTemplate not initialized.\n");
+            }
+
             var substitutions = new Dictionary<string, string?>
             {
                 { "safeprojectname",    Context.Current.TestTemplate},

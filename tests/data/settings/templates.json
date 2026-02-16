@@ -21,16 +21,16 @@
       { "FileName": "src/main.cpp", "Substitute": true }
     ],
     "BuiltFiles": [
-      { "FileName": "bin/$safeprojectname$.exe", "Platforms": ["Windows"] },
-      { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] },
-      { "FileName": "bin/$safeprojectname$", "Platforms": ["Linux"] }
+      { "FileName": "bin/$safeprojectname$.exe", "Platforms": ["Windows"], "Executable":  true },
+      { "FileName": "bin/$safeprojectname$", "Platforms": ["Linux"], "Executable": true },
+      { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] }
     ]
   },
   {
     "Name": "CppWin32",
     "FileName": "cpp.gui.win32.project.zip",
     "Langage":  "cpp",
-    "Type":  "Win32",
+    "Type":  "GUI",
     "Platforms": ["Windows"],
     "Files": [
       { "FileName": "CMakeLists.txt", "Substitute": true },
@@ -48,7 +48,7 @@
       { "FileName": "src/winmain.cpp", "Substitute": true }
     ],
     "BuiltFiles": [
-      { "FileName": "bin/$safeprojectname$.exe", "Platforms": ["Windows"] },
+      { "FileName": "bin/$safeprojectname$.exe", "Platforms": ["Windows"], "Executable": false },
       { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] }
     ]
   },
@@ -76,11 +76,11 @@
       { "FileName": "src/module.cpp", "Substitute": true }
     ],
     "BuiltFiles": [
-      { "FileName": "bin/$safeprojectname$.dll", "Platforms": ["Windows"] },
+      { "FileName": "bin/$safeprojectname$.dll", "Platforms": ["Windows"], "Executable": true },
+      { "FileName": "bin/$safeprojectname$.so", "Platforms": ["Linux"], "Executable": true },
       { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] },
       { "FileName": "lib/$safeprojectname$.lib", "Platforms": ["Windows"] },
-      { "FileName": "include/module.h", "Platforms": ["Windows", "Linux"] },
-      { "FileName": "bin/$safeprojectname$.so", "Platforms": ["Linux"] }
+      { "FileName": "include/module.h", "Platforms": ["Windows", "Linux"] }
     ]
   },
   {
@@ -92,7 +92,7 @@
     "Platforms": [ "Windows", "Linux" ],
     "Files": [
       { "FileName": "CMakeLists.txt", "Substitute": true },
-      { "FileName": "$safeprojectname$.csproj", "Substitute": true },
+      { "FileName": "CppLibrary.csproj", "Substitute": true },
       { "FileName": "build.bat", "Substitute": true },
       { "FileName": "build.sh", "Substitute": true },
       { "FileName": "Library.ico", "Substitute": true },
@@ -107,7 +107,7 @@
       { "FileName": "src/library.cpp", "Substitute": true }
     ],
     "BuiltFiles": [
-      { "FileName": "lib/$safeprojectname$.lib", "Platforms": ["Windows"] },
+      { "FileName": "lib/$safeprojectname$.lib", "Platforms": ["Windows"], "Executable": true },
       { "FileName": "include/library.h", "Platforms": ["Windows", "Linux"] },
       { "FileName": "lib/$safeprojectname$.a", "Platforms": ["Linux"] }
     ]

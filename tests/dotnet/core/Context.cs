@@ -18,9 +18,9 @@ namespace Croicu.Templates.Test.Core
                 Context.s_current.Value = null;
             }
 
-            public string? TestClassName { get; set; }
-            public string? TestName { get; set; }
-            public string? TestTemplate { get; set; }
+            public string TestClassName { get; set; } = "";
+            public string TestName { get; set; } = "";
+            public string TestTemplate { get; set; } = "";
         }
 
         public static string RepoRoot => s_env.Value.RepoRoot;
