@@ -27,6 +27,7 @@ EXTRA_CMAKE_BUILD_ARGS=()
 while [[ $# -gt 0 ]]; do
     case "$1" in
         build|clean|rebuild|test) COMMAND="$1" ;;
+        zap) COMMAND="$1" ;;
         debug|release) CONFIG="$1" ;;
         x64|x86|arm|aarch64) ARCH="$1" ;;
         gcc|clang) TOOLCHAIN="$1" ;;
@@ -99,7 +100,7 @@ RESULTS_DIR_ABS="${REPO_ROOT}/${RESULTS_DIR}"
 # ------------------------------------------------------------
 # Commands
 # ------------------------------------------------------------
-if [[ "$COMMAND" == "clean" ]]; then
+if [[ "$COMMAND" == "clean" || "$COMMAND" == "zap" ]]; then
     rm -rf "$BUILD_DIR_ABS" "$INSTALL_DIR_ABS" "$RESULTS_DIR_ABS"
     exit 0
 fi
