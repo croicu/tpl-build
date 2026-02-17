@@ -52,5 +52,4 @@ jobs:
         with:
           files: |
             out/**/templates/**/*.zip
-            out/**/registry.json
           fail_on_unmatched_files: true
