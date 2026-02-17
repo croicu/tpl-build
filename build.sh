@@ -28,7 +28,7 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         build|clean|rebuild|test) COMMAND="$1" ;;
         zap) COMMAND="$1" ;;
-        debug|release) CONFIG="$1" ;;
+        debug|release|ship) CONFIG="$1" ;;
         x64|x86|arm|aarch64) ARCH="$1" ;;
         gcc|clang) TOOLCHAIN="$1" ;;
         --cmake:*) EXTRA_CMAKE_ARGS+=("${1#--cmake:}") ;;

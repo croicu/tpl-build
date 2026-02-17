@@ -40,17 +40,17 @@ jobs:
       - name: Build
         run: |
           chmod +x ./build.sh
-          ./build.sh build x64 Ship
+          ./build.sh build x64 Release
 
       - name: Test
         run: |
           chmod +x ./build.sh
-          ./build.sh test x64 Ship
+          ./build.sh test x64 Release
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            out/templates/**/*.zip
+            out/**/templates/**/*.zip
             out/**/registry.json
           fail_on_unmatched_files: true
