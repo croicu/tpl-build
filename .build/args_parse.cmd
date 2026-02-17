@@ -16,6 +16,7 @@ if /i "%ARG%"=="test"     set "COMMAND=test"     & shift & goto :parse
 
 if /i "%ARG%"=="debug"    set "FLAVOR=debug"   & shift & goto :parse
 if /i "%ARG%"=="release"  set "FLAVOR=release" & shift & goto :parse
+if /i "%ARG%"=="ship"     set "FLAVOR=release" & shift & goto :parse
 
 if /i "%ARG%"=="x64"      set "ARCH=x64" & shift & goto :parse
 if /i "%ARG%"=="x86"      set "ARCH=x86" & shift & goto :parse

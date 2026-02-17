@@ -1,0 +1,55 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build_test_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"   # adjust if needed
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Install GUI deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-4-dev \
+            qt6-base-dev \
+            qt6-base-dev-tools
+
+      - name: Build
+        run: |
+          chmod +x ./build.sh
+          ./build.sh build x64 Release
+
+      - name: Test
+        run: |
+          chmod +x ./build.sh
+          ./build.sh test x64 Release
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            out/**/templates/**/*.zip
+          fail_on_unmatched_files: true
