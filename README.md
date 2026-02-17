@@ -1,10 +1,10 @@
-# tpl-builder
+# tpl-build
 
 ## Overview
 
-`tpl-builder` produces **canonical, ZIP-based project templates**.
+`tpl-build` produces **canonical, ZIP-based project templates**.
 
-It is a **builder only**:
+It is a **build only**:
 
 -   Builds template artifacts
 -   Tests templates cross-platform
@@ -77,7 +77,7 @@ They are zipped exactly as authored.
 
 ## Repository Structure
 
-    tpl-builder/
+    tpl-build/
     ├─ build.bat
     ├─ build.sh
     ├─ README.md
