@@ -41,6 +41,15 @@ jobs:
         run: |
           build.bat build ${{ matrix.arch }} ${{ matrix.config }}
 
+      - name: Install GUI deps (Linux)
+        if: runner.os != 'Windows'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-4-dev \
+            qt6-base-dev \
+            qt6-base-dev-tools
+
       - name: Build (Linux)
         if: runner.os != 'Windows'
         shell: bash
