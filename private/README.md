@@ -1,5 +1,41 @@
 # VSIX Template
 
+
+### Template names / descriptions:
+#### Cross-platform (generic)
+```
+Croicu C++ Console
+Minimal C++ console template.
+
+Croicu C++ Library
+Minimal C++ static library template.
+
+Croicu C++ Module
+Minimal C++ shared library template.
+```
+#### Linux specializations
+```
+Croicu C++ Linux Console
+Minimal Linux C++ console template.
+
+Croicu C++ Linux Library
+Minimal Linux C++ static library template.
+
+Croicu C++ Linux Module
+Minimal Linux C++ shared library template.
+
+Croicu C++ Linux GTK GUI
+Minimal Linux GTK GUI template.
+
+Croicu C++ Linux Qt GUI
+Minimal Linux Qt GUI template.
+```
+#### Windows specialization
+```
+Croicu C++ Win32 GUI
+Minimal native Win32 GUI template.
+```
+
 ### VSIX Custom Wizard
 
 https://learn.microsoft.com/en-us/visualstudio/extensibility/how-to-use-wizards-with-project-templates?view=visualstudio
