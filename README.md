@@ -2,164 +2,211 @@
 
 ## Overview
 
-This repository builds **project templates** with a **ZIP‑first** workflow.
+`tpl-build` produces **canonical, ZIP-based project templates**.
 
-The core idea is simple:
+It is a **build only**:
 
-- Templates are **plain files**.
-- What you see in the template folder is **exactly what gets deployed** when you click *New Project* in Visual Studio (minus token substitution).
-- Packaging is a **pure transformation step** (ZIP creation and layout), not a build of user code.
+-   Builds template artifacts
+-   Tests templates cross-platform
+-   Packages ZIPs
+-   Publishes release artifacts
 
-Visual Studio is treated as a **deployment UX**, not the identity of the system.   
-This repository is a **builder** only.
+It does **not**:
 
-It produces template artifacts (ZIPs). It does **not**:
-- instantiate projects
-- register templates with an IDE
-- run user code
+-   Instantiate projects
+-   Register templates with an IDE
+-   Run user code
 
-**Current scope:** Windows templates only (Linux / Qt planned).
+Templates are treated as **data**, not code.
 
----
+------------------------------------------------------------------------
 
 ## Core Principles
 
-### 1. Canonical payload = deployed layout (1:1)
+### 1. ZIP-first
+
+ZIP files are the canonical artifact.
+
+Everything under:
+
+    out/<arch>/<config>/templates/
+
+is publishable.
+
+No generated artifacts are committed to Git.
+
+------------------------------------------------------------------------
+
+### 2. Canonical Template Identity (Tool-Agnostic)
+
+Template IDs follow this grammar:
+
+    <lang>.<kind>[.<specialization>][.<platform>]
+
+Examples:
+
+-   `cpp.console`
+-   `cpp.library`
+-   `cpp.module`
+-   `cpp.gui.qt`
+-   `cpp.gui.win32`
+
+Rules:
+
+-   No IDE leakage
+-   No packaging leakage
+-   Platform only when inherently required
+-   Framework encoded as specialization
+
+------------------------------------------------------------------------
+
+### 3. Payload is 1:1 Deployed Layout
 
 Each template lives under:
 
-```
-src/templates/<language>/<flavor>/project/
-```
+    src/templates/<id>/project/
 
-The contents of `project/` are deployed verbatim when the template is instantiated.
+Everything inside `project/` is deployed verbatim (minus token
+substitution).
 
-- `project/CMakeLists.txt` is **payload**, not build logic
-- No template `CMakeLists.txt` is ever executed by this repo
-- Templates are treated as **data**
+Templates are **never built** by this repository.
 
----
+They are zipped exactly as authored.
 
-### 2. ZIP is the primary artifact
-
-- The main deliverable is a **Visual Studio template ZIP** (`.vstemplate`‑based)
-- ZIPs are built on **Windows, Linux, and CI**
-- Installation is done by copying ZIPs into the Visual Studio Templates folder
-- ZIP build has **no dependency on Visual Studio**
-
+------------------------------------------------------------------------
 
 ## Repository Structure
 
-```
-tpl-build/
-├─ build.bat
-├─ build.sh
-├─ README.md
-├─ src/
-│  └─ templates/
-│     ├─ CMakeLists.txt
-│     └─ cpp/
-│        ├─ CMakeLists.txt        # centralized packaging logic
-│        ├─ console/
-│        │  └─ project/           # template payload (1:1 deployed)
-│        ├─ win32/
-│        │  └─ project/
-│        ├─ library/
-│        │  └─ project/
-│        └─ module/
-│           └─ project/
-├─ build/                         # disposable
-└─ out/                           # installed artifacts (contract)
-```
+    tpl-build/
+    ├─ build.bat
+    ├─ build.sh
+    ├─ README.md
+    ├─ src/
+    │  └─ templates/
+    │     ├─ cpp.console/
+    │     │  └─ project/
+    │     ├─ cpp.library/
+    │     │  └─ project/
+    │     ├─ cpp.module/
+    │     │  └─ project/
+    │     ├─ cpp.gui.qt/
+    │     │  └─ project/
+    │     └─ cpp.gui.win32/
+    │        └─ project/
+    ├─ tests/
+    ├─ build/        # disposable
+    └─ out/          # publishable artifacts only
 
-Only the **non‑`project/`** `CMakeLists.txt` files participate in building this repo.
+------------------------------------------------------------------------
 
----
+## out/ Layout (Subset Model)
+
+    out/
+      templates/
+        <id>.zip
+        ...
+        vs/
+          <id>.project.zip
+          <id>.item.zip
+
+-   `out/templates/` → full tpl-deployable universe
+-   `out/templates/vs/` → subset that also happens to be Visual
+    Studio-registerable
+
+Visual Studio artifacts are variants, not separate templates.
+
+------------------------------------------------------------------------
 
 ## Build System
 
-### CMake (ZIP pipeline)
+### Single Entry Point
 
-- The project is **language‑less**:
+Windows:
 
-```cmake
-project(tpl_build LANGUAGES NONE)
-```
+    build.bat build <arch> <config>
+    build.bat test  <arch> <config>
 
-- CMake is used only to:
-  - zip template folders
-  - install ZIPs into `out/`
-- Zipping is done with the built‑in, cross‑platform command:
+Linux:
 
-```sh
-cmake -E tar cf <template>.zip --format=zip .
-```
+    ./build.sh build <arch> <config>
+    ./build.sh test  <arch> <config>
 
-- ZIPs are created in the **build tree**
-- `cmake --install` moves them to `out/.../templates/...`
+CI uses the exact same commands.
 
-No PowerShell. No external zip tools.
+------------------------------------------------------------------------
 
----
+### Determinism Rules
 
-### build.bat (Windows)
+-   Tests consume ZIPs --- they do not build templates
+-   All artifacts land under `out/`
+-   `build/` and `out/` are ignored by Git
+-   Versioning comes from Git tags
+-   Release artifacts are published via GitHub Releases
 
-Single authoritative entry point.
+------------------------------------------------------------------------
 
-Behavior:
+## CI/CD Model
 
-- `build`, `build build`
-  - always builds ZIP templates
-  - installs ZIPs to `out/`
-- `build test`
-  - runs the test suite (requires net10)
+CI validates:
 
----
+-   Linux build
+-   Windows build
+-   Cross-platform tests
+-   Deterministic ZIP generation
 
-### build.sh (Linux / macOS)
+Release is triggered by tag:
 
-- ZIP‑only build
-- Always works
+    git tag v0.1.0
+    git push origin v0.1.0
 
-No probing, no branching.
+Tag name becomes release version.
 
----
+------------------------------------------------------------------------
 
-## Multi‑template ZIP rule
+## Extensibility Model (v2-Ready)
 
-- A ZIP corresponds to **one** template entry in Visual Studio
-- Multiple `.vstemplate` files are allowed **only** for a single `ProjectGroup`
-  (multi‑project solution template)
-- ZIPs cannot act as “template bundles”
+Projects ship with predefined extension points:
 
----
+    cmake/subdirectories.generated.cmake
+    cmake/targets.generated.cmake
+    cmake/sources.generated.cmake
+    cmake/link.generated.cmake
 
-## Generator compatibility
+Future item deployment will:
 
-Duplication inside template payloads is expected.
+-   Drop into `items/<name>/`
+-   Append only to `cmake/*.generated.cmake`
+-   Never edit user-authored files
 
-A future `tpl‑generator` will:
+No patching. No heuristic merging. Deterministic growth only.
 
-- generate `src/templates/**/project/**` trees
-- overwrite payload freely
+------------------------------------------------------------------------
 
-This repo’s contract stays stable:
+## Conceptual Invariants
 
-> **“Zip whatever is under `project/`.”**
+-   ZIP is the artifact
+-   Registry is indirection
+-   Deploy is deterministic and offline-first
+-   IDEs are adapters, not authorities
+-   Arch is expressed at configure time
+-   Specialization is encoded in ID; tooling is never encoded
 
-No refactors required when the generator arrives.
+------------------------------------------------------------------------
 
----
+## Status
 
-## Summary
+v1 template system is structurally complete:
 
-- ZIP‑first
-- Cross‑platform for core artifacts
-- Deterministic, quiet builds
-- Clear separation between:
-  - payload
-  - packaging
-  - installation
+-   Cross-platform console/library/module
+-   Linux GTK and Qt GUI
+-   Windows Win32 GUI
+-   Deterministic CI/CD
+-   Clean artifact model
+-   Future-proof extensibility design
 
-This repo exists to do **one thing well**:  
-turn canonical template payloads into distributable Visual Studio templates.
+------------------------------------------------------------------------
+
+This repository exists to do **one thing well**:
+
+Turn canonical template payloads into immutable, publishable ZIP
+artifacts.
