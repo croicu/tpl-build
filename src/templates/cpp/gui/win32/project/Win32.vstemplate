@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>Croicu C++ Win32 GUI Application</Name>
-    <Description>Native Win32 GUI application.</Description>
+    <Name>Croicu C++ Win32 GUI</Name>
+    <Description>Minimal Win32 GUI template.</Description>
     <Icon>Win32.ico</Icon>
     <ProjectType>VC</ProjectType>
     <LanguageTag>cpp</LanguageTag>

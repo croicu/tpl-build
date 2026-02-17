@@ -2,7 +2,7 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
     <Name>Croicu C++ Linux Library</Name>
-    <Description>Croicu C++ Linux Library.</Description>
+    <Description>Minimal Linux C++ static library template.</Description>
     <Icon>LinuxLibrary.ico</Icon>
     <ProjectType>VC</ProjectType>
     <LanguageTag>cpp</LanguageTag>
