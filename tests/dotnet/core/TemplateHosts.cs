@@ -15,6 +15,23 @@ namespace Croicu.Templates.Test.Core
         public string Dir { get; set; } = "";
 
         public TemplateFileInfo[] Files { get; set; } = System.Array.Empty<TemplateFileInfo>();
+        public TemplateFileInfo[] BuiltFiles { get; set; } = System.Array.Empty<TemplateFileInfo>();
+
+        public TemplateFileInfo? Executable
+        {
+            get
+            {
+                foreach (var file in BuiltFiles)
+                {
+                    if (file.Executable && file.IsBuilt())
+                    {
+                        return file;
+                    }
+                }
+
+                return null;
+            }
+        }
     }
 
     #endregion
@@ -41,7 +58,8 @@ namespace Croicu.Templates.Test.Core
                 {
                     Name = HostInfo.Name,
                     Dir = HostInfo.Dir,
-                    Files = HostInfo.Files
+                    Files = HostInfo.Files,
+                    BuiltFiles = HostInfo.BuiltFiles
                 };
             }
         }
@@ -70,17 +88,6 @@ namespace Croicu.Templates.Test.Core
         #endregion
 
         #region Private Methods
-
-        private static IEnumerable<object[]> GetByType(string type)
-        {
-            foreach (var HostInfo in LoadHosts())
-                yield return new object[]
-                {
-                    HostInfo.Name,
-                    HostInfo.Dir,
-                    HostInfo.Files
-                };
-        }
 
         #endregion
 

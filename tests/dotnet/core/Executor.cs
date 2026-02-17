@@ -11,13 +11,14 @@ namespace Croicu.Templates.Test.Core
         public static int Execute(
             string fileName,
             string? arguments = null,
-            string? directory = null)
+            string? directory = null,
+            IDictionary<string, string>? environmentOverrides = null)
         {
             var logger = Context.Logger;
             string stdout;
             string stderr;
 
-            int exitCode = Execute(fileName, arguments, directory, out stdout, out stderr);
+            int exitCode = Execute(fileName, arguments, directory, environmentOverrides, out stdout, out stderr);
 
             logger.Log(LogLevel.Debug, "STDOUT:");
             logger.Log(LogLevel.Debug, stdout);
@@ -35,6 +36,7 @@ namespace Croicu.Templates.Test.Core
             string  fileName,
             string? arguments,
             string? directory,
+            IDictionary<string, string>? environmentOverrides,
             out string stdout,
             out string stderr)
         {
@@ -60,6 +62,14 @@ namespace Croicu.Templates.Test.Core
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
+            if (environmentOverrides != null)
+            {
+                foreach (var kv in environmentOverrides)
+                {
+                    psi.Environment[kv.Key] = kv.Value;
+                }
+            }
+
             var process = Process.Start(psi);
 
             if (process == null)

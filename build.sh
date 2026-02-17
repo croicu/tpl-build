@@ -26,7 +26,8 @@ EXTRA_CMAKE_BUILD_ARGS=()
 # ------------------------------------------------------------
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        build|clean|rebuild) COMMAND="$1" ;;
+        build|clean|rebuild|test) COMMAND="$1" ;;
+        zap) COMMAND="$1" ;;
         debug|release) CONFIG="$1" ;;
         x64|x86|arm|aarch64) ARCH="$1" ;;
         gcc|clang) TOOLCHAIN="$1" ;;
@@ -90,38 +91,35 @@ fi
 # ------------------------------------------------------------
 BUILD_DIR="build/${ARCH}/${CMAKE_CONFIG}"
 INSTALL_DIR="out/${ARCH}/${CMAKE_CONFIG}"
+RESULTS_DIR="logs/tests/${ARCH}/${CMAKE_CONFIG}"
 
 BUILD_DIR_ABS="${REPO_ROOT}/${BUILD_DIR}"
 INSTALL_DIR_ABS="${REPO_ROOT}/${INSTALL_DIR}"
+RESULTS_DIR_ABS="${REPO_ROOT}/${RESULTS_DIR}"
 
 # ------------------------------------------------------------
 # Commands
 # ------------------------------------------------------------
-if [[ "$COMMAND" == "clean" ]]; then
-    rm -rf "$BUILD_DIR_ABS" "$INSTALL_DIR_ABS"
+if [[ "$COMMAND" == "clean" || "$COMMAND" == "zap" ]]; then
+    rm -rf "$BUILD_DIR_ABS" "$INSTALL_DIR_ABS" "$RESULTS_DIR_ABS"
     exit 0
 fi
 
 if [[ "$COMMAND" == "rebuild" ]]; then
-    rm -rf "$BUILD_DIR_ABS" "$INSTALL_DIR_ABS"
+    rm -rf "$BUILD_DIR_ABS" "$INSTALL_DIR_ABS" "$RESULTS_DIR_ABS"
 fi
 
-# ------------------------------------------------------------
-# Configure
-# ------------------------------------------------------------
-cmake \
-    -S "$REPO_ROOT" \
-    -B "$BUILD_DIR_ABS" \
-    -DCMAKE_BUILD_TYPE="$CMAKE_CONFIG" \
-    -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR_ABS" \
-    "${EXTRA_CMAKE_ARGS[@]}"
+source "$REPO_ROOT/.build/cmake_build.sh"
+source "$REPO_ROOT/.build/dotnet_build.sh"
+source "$REPO_ROOT/.build/dotnet_test.sh"
 
-# ------------------------------------------------------------
-# Build
-# ------------------------------------------------------------
-cmake --build "$BUILD_DIR_ABS" "${EXTRA_CMAKE_BUILD_ARGS[@]}"
+if [[ "$COMMAND" == "build" || "$COMMAND" == "rebuild" || "$COMMAND" == "test" ]]; then
+    cmake_build || exit 1
+fi
 
-# ------------------------------------------------------------
-# Install (single-config generators on Linux/WSL)
-# ------------------------------------------------------------
-cmake --install "$BUILD_DIR_ABS"
+if [[ "$COMMAND" == "test" ]]; then
+    dotnet_check || exit 1
+    dotnet_build || exit 1
+    dotnet_test || exit 1
+fi
+

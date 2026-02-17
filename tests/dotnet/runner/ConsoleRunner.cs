@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Croicu.Templates.Test.Core;
+using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-
-using Croicu.Templates.Test.Core;
+using System.Xml.Linq;
 
 
 namespace Croicu.Templates.Test.Runner
@@ -18,24 +19,37 @@ namespace Croicu.Templates.Test.Runner
             {
                 string zipPath = Path.Combine(Context.OutTemplatesDir, templateInfo.FileName);
                 string stagingDir = Path.Combine(Context.TestDir, templateInfo.Name + ".staging");
-                string destDir = Path.Combine(Context.TestDir, templateInfo.Name);
-                string exeName = templateInfo.Name + ".exe";
-                string pdbName = templateInfo.Name + ".pdb";
-                string exePath = Path.Combine(Context.TestTemplateOutBinDir, exeName);
+                string destDir = Path.Combine(Context.TestDir, Context.Current.TestTemplate);
 
                 Console.WriteLine($"[Info] Testing: {templateInfo.Name}...");
 
-                if (!Commands.Clean(stagingDir) ||
-                    !Commands.Clean(destDir) ||
-                    !Commands.Deploy(zipPath, stagingDir) ||
-                    !Commands.VerifyDeployed(stagingDir, templateInfo.Files) ||
-                    !Commands.InstantiateTemplate(stagingDir, destDir, templateInfo.Name, templateInfo.Files) ||
-                    !Commands.VerifyDeployed(destDir, templateInfo.Files) ||
-                    !Commands.Build(destDir) ||
-                    !Commands.VerifyBuilt(Context.TestTemplateOutBinDir, [exeName, pdbName]) ||
-                    !Commands.Execute(exePath))
-                {
+                if (!Commands.Clean(stagingDir))
                     return -1;
+                if (!Commands.Clean(destDir))
+                    return -1;
+                if (!Commands.Deploy(zipPath, stagingDir))
+                    return -1;
+                if (!Commands.VerifyDeployed(stagingDir, templateInfo.Files, false))
+                    return -1;
+                if (!Commands.InstantiateTemplate(stagingDir, destDir, templateInfo.Name, templateInfo.Files))
+                    return -1;
+                if (!Commands.VerifyDeployed(destDir, templateInfo.Files, true))
+                    return -1;
+
+                if (Commands.ShouldBuild(templateInfo.Name, templateInfo.Platforms))
+                {
+                    if (!Commands.Build(destDir))
+                        return -1;
+                    if (!Commands.VerifyBuilt(Context.TestTemplateOutDir, templateInfo.BuiltFiles))
+                        return -1;
+
+                    if (templateInfo.Executable != null)
+                    {
+                        string exePath = Path.Combine(Context.TestTemplateOutDir, templateInfo.Executable.TargetFileName);
+
+                        if (!Commands.Execute(exePath))
+                            return -1;
+                    }
                 }
 
                 // If we reached this point, all commands were successful

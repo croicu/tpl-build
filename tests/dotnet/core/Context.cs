@@ -18,9 +18,9 @@ namespace Croicu.Templates.Test.Core
                 Context.s_current.Value = null;
             }
 
-            public string? TestClassName { get; set; }
-            public string? TestName { get; set; }
-            public string? TestTemplate { get; set; }
+            public string TestClassName { get; set; } = "";
+            public string TestName { get; set; } = "";
+            public string TestTemplate { get; set; } = "";
         }
 
         public static string RepoRoot => s_env.Value.RepoRoot;
@@ -36,8 +36,8 @@ namespace Croicu.Templates.Test.Core
         public static string OutBinDir => Path.Combine(OutDir, "bin");
         public static string OutLibDir => Path.Combine(OutDir, "lib");
 
+        public static string TestHostsDir => Path.Combine(RepoRoot, "tests", "hosts");
         public static string TestDataDir => Path.Combine(RepoRoot, "tests", "data");
-        public static string TestHostsDir => Path.Combine(TestDataDir, "hosts");
         public static string TestSettingsDir => Path.Combine(TestDataDir, "settings");
 
         public static string TestRoot => Path.Combine(BuildDir, "test");
@@ -169,7 +169,7 @@ namespace Croicu.Templates.Test.Core
 
         private static readonly Lazy<Env> s_env = new(Create, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
         private static ILogger? s_logger = null;
-        public static readonly AsyncLocal<LocalContext?> s_current = new();
+        public static readonly ThreadLocal<LocalContext?> s_current = new();
 
         #endregion
 

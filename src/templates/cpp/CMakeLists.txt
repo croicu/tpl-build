@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(templates_cpp LANGUAGES NONE)
 
 include("${PROJECT_ROOT}/.build/zip.cmake")
@@ -10,7 +10,12 @@ templates_zip_init(PACK_NAME cpp OUT_BUILD_ROOT cpp_zip_build_root AGGREGATE_TAR
 # Aggregate clean target for all C++ template ZIPs.
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${cpp_zip_build_root}")
 
-templates_add_payload_zip(PACK_NAME cpp REL_DIR "console/project"  BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
-templates_add_payload_zip(PACK_NAME cpp REL_DIR "module/project"   BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
-templates_add_payload_zip(PACK_NAME cpp REL_DIR "library/project"  BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
-templates_add_payload_zip(PACK_NAME cpp REL_DIR "win32/project"    BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "console/project"           BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "console/linux/project"     BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "module/project"            BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "module/linux/project"      BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "library/project"           BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "library/linux/project"     BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "gui/win32/project"         BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "gui/qt/project"            BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "gui/gtk/project"           BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")

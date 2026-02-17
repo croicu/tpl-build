@@ -24,9 +24,9 @@ namespace Croicu.Templates.Test.Runner
 
         private void Init(TemplateInfo templateInfo)
         {
-            Context.Current.TestClassName = this.GetType().FullName;
+            Context.Current.TestClassName = this.GetType().FullName ?? this.GetType().Name;
             Context.Current.TestName = "Run";
-            Context.Current.TestTemplate = templateInfo.Name;
+            Context.Current.TestTemplate = "__" + templateInfo.Name + "__";
         }
 
         private void Done(TemplateInfo templateInfo)

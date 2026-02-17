@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "linux: build debug x64",
+      "type": "shell",
+      "command": "/usr/bin/bash",
+      "args": ["${workspaceFolder}/build.sh", "build", "debug", "x64"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: rebuild debug x64",
+      "type": "shell",
+      "command": "/usr/bin/bash",
+      "args": ["${workspaceFolder}/build.sh", "rebuild", "debug", "x64"],
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "options": { "cwd": "${workspaceFolder}" }
+    },
+    {
+      "label": "linux: clean debug x64",
+      "type": "shell",
+      "command": "/usr/bin/bash",
+      "args": ["${workspaceFolder}/build.sh", "clean", "debug", "x64"],
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}" }
+    }
+  ]
+}
