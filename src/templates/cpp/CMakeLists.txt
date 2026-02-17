@@ -18,3 +18,4 @@ templates_add_payload_zip(PACK_NAME cpp REL_DIR "library/project"           BUIL
 templates_add_payload_zip(PACK_NAME cpp REL_DIR "library/linux/project"     BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
 templates_add_payload_zip(PACK_NAME cpp REL_DIR "gui/win32/project"         BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
 templates_add_payload_zip(PACK_NAME cpp REL_DIR "gui/qt/project"            BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")
+templates_add_payload_zip(PACK_NAME cpp REL_DIR "gui/gtk/project"           BUILD_ROOT "${cpp_zip_build_root}" TARGET_PREFIX "cpp")

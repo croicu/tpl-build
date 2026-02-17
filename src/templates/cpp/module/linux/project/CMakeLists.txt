@@ -17,6 +17,8 @@ target_include_directories($safeprojectname$
 )
 
 install(TARGETS $safeprojectname$ 
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}   # keep next to exe
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
