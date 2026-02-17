@@ -1,0 +1,69 @@
+name: ci
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build_test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        arch: [x64]
+        config: [Debug]   # change to Ship or add Ship if you want both
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # If your build scripts require specific toolchains, pin them here.
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"   # adjust if you're on net9.0/net8.0 today
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          build.bat build ${{ matrix.arch }} ${{ matrix.config }}
+
+      - name: Build (Linux)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+            chmod +x ./build.sh
+            ./build.sh build ${{ matrix.arch }} ${{ matrix.config }}
+
+      - name: Test (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          build.bat test ${{ matrix.arch }} ${{ matrix.config }}
+
+      - name: Test (Linux)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+            chmod +x ./build.sh
+            ./build.sh test ${{ matrix.arch }} ${{ matrix.config }}
+
+      - name: Upload out artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: out-${{ runner.os }}-${{ matrix.arch }}-${{ matrix.config }}
+          path: out/
+          if-no-files-found: error
