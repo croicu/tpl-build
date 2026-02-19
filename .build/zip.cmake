@@ -76,7 +76,7 @@ function(templates_add_payload_zip)
   set(zip_name "${TAPZ_PACK_NAME}.${rel_dotted}.zip")
   set(zip_out_dir "${TAPZ_BUILD_ROOT}")
   set(zip_out     "${zip_out_dir}/${zip_name}")
-
+  
   # Target naming
   set(prefix "template_zip")
   if(TAPZ_TARGET_PREFIX)
@@ -101,6 +101,29 @@ function(templates_add_payload_zip)
     add_dependencies("${_agg}" "${tgt}")
   endif()
 
+  get_filename_component(_zip_name "${zip_out}" NAME)   # zip_out = full path to zip output
+  set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_URLS "./templates/${_zip_name}")
+
   # Install: <prefix>/templates/<zip_name>
   install(FILES "${zip_out}" DESTINATION "templates")
+endfunction()
+
+function(templates_write_manifest out_file)
+  get_property(_urls GLOBAL PROPERTY TPL_MANIFEST_URLS)
+  if(NOT _urls)
+    message(FATAL_ERROR "templates_write_manifest: no zips were registered")
+  endif()
+
+  file(WRITE "${out_file}" "{\n  \"assets\": [\n")
+
+  set(_first TRUE)
+  foreach(u IN LISTS _urls)
+    if(NOT _first)
+      file(APPEND "${out_file}" ",\n")
+    endif()
+    file(APPEND "${out_file}" "    {\"url\": \"${u}\"}")
+    set(_first FALSE)
+  endforeach()
+
+  file(APPEND "${out_file}" "\n  ]\n}\n")
 endfunction()

@@ -51,5 +51,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            out/**/templates/**/*.zip
+            out/x64/Release/templates/**/*.zip
+            out/x64/Release/templates/manifest.json
           fail_on_unmatched_files: true
