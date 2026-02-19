@@ -102,7 +102,7 @@ function(templates_add_payload_zip)
   endif()
 
   get_filename_component(_zip_name "${zip_out}" NAME)   # zip_out = full path to zip output
-  set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_URLS "./templates/${_zip_name}")
+  set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_URLS "${_zip_name}")
 
   # Install: <prefix>/templates/<zip_name>
   install(FILES "${zip_out}" DESTINATION "templates")
