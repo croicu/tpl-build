@@ -52,4 +52,5 @@ jobs:
         with:
           files: |
             out/**/templates/**/*.zip
+            out/**/manifest.json
           fail_on_unmatched_files: true
