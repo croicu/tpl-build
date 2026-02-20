@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>Croicu C++ Linux Console</Name>
+    <Description>Minimal Linux C++ console template.</Description>
+    <Icon>LinuxConsole.ico</Icon>
+    <ProjectType>VC</ProjectType>
+    <LanguageTag>cpp</LanguageTag>
+    <PlatformTag>linux</PlatformTag>
+    <ProjectTypeTag>console</ProjectTypeTag>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>98c9b6c3-36a8-4912-9de1-3ba6cd4b393c</TemplateID>
+    <CreateNewFolder>false</CreateNewFolder>
+    <DefaultName>Console</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="LinuxConsole.vcxproj" TargetFileName="$safeprojectname$.vcxproj" ReplaceParameters="true">
+      <Folder Name=".vscode" TargetFolderName=".vscode">
+        <ProjectItem ReplaceParameters="true" TargetFileName="launch.json">launch.json</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="settings.json">settings.json</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="tasks.json">tasks.json</ProjectItem>
+      </Folder>
+      <Folder Name=".cmake" TargetFolderName=".cmake">
+        <ProjectItem ReplaceParameters="true" TargetFileName="x64.cmake">x64.cmake</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="x86.cmake">x86.cmake</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="arm.cmake">arm.cmake</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="aarch64.cmake">aarch64.cmake</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="sources.generated.cmake">sources.generated.cmake</ProjectItem>
+      </Folder>
+      <Folder Name="src" TargetFolderName="src">
+        <ProjectItem ReplaceParameters="true" TargetFileName="main.cpp" OpenInEditor="true">main.cpp</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$.vcxproj.filters">LinuxConsole.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="CMakeLists.txt">CMakeLists.txt</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="build.sh">build.sh</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

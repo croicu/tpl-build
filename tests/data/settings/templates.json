@@ -4,41 +4,136 @@
     "FileName": "cpp.console.project.zip",
     "Langage":  "cpp",
     "Type":  "Console",
+    "Platforms": [ "Windows", "Linux" ],
     "Files": [
       { "FileName": "CMakeLists.txt", "Substitute": true },
       { "FileName": "Console.ico", "Substitute": false },
-      { "FileName": "Console.vcxproj", "Substitute": true },
-      { "FileName": "Console.vcxproj.filters", "Substitute": true },
+      { "FileName": "Console.vcxproj", "TargetFileName":"$safeprojectname$.vcxproj", "Substitute": true },
+      { "FileName": "Console.vcxproj.filters", "TargetFileName":"$safeprojectname$.vcxproj.filters", "Substitute": true },
       { "FileName": "Console.vstemplate", "Substitute": true },
       { "FileName": "CppConsole.csproj", "Substitute": true },
       { "FileName": "build.bat", "Substitute": true },
       { "FileName": "build.sh", "Substitute": true },
-      { "FileName": ".cmake\\sources.generated.cmake", "Substitute": true },
-      { "FileName": ".vscode\\launch.json", "Substitute": true },
-      { "FileName": ".vscode\\settings.json", "Substitute": true },
-      { "FileName": ".vscode\\tasks.json", "Substitute": true },
-      { "FileName": "src\\main.cpp", "Substitute": true }
+      { "FileName": ".cmake/sources.generated.cmake", "Substitute": true },
+      { "FileName": ".vscode/launch.json", "Substitute": true },
+      { "FileName": ".vscode/settings.json", "Substitute": true },
+      { "FileName": ".vscode/tasks.json", "Substitute": true },
+      { "FileName": "src/main.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "bin/$safeprojectname$.exe", "Platforms": ["Windows"], "Executable":  true },
+      { "FileName": "bin/$safeprojectname$", "Platforms": ["Linux"], "Executable": true },
+      { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] }
+    ]
+  },
+  {
+    "Name": "CppLinuxConsole",
+    "FileName": "cpp.console.linux.project.zip",
+    "Langage":  "cpp",
+    "Type":  "Console",
+    "Platforms": [ "Linux" ],
+    "Files": [
+      { "FileName": "CMakeLists.txt", "Substitute": true },
+      { "FileName": "LinuxConsole.ico", "Substitute": false },
+      { "FileName": "LinuxConsole.vcxproj", "TargetFileName":"$safeprojectname$.vcxproj", "Substitute": true },
+      { "FileName": "LinuxConsole.vcxproj.filters", "TargetFileName":"$safeprojectname$.vcxproj.filters", "Substitute": true },
+      { "FileName": "LinuxConsole.vstemplate", "Substitute": true },
+      { "FileName": "CppLinuxConsole.csproj", "Substitute": true },
+      { "FileName": "build.sh", "Substitute": true },
+      { "FileName": ".cmake/aarch64.cmake", "Substitute": true },
+      { "FileName": ".cmake/arm.cmake", "Substitute": true },
+      { "FileName": ".cmake/x64.cmake", "Substitute": true },
+      { "FileName": ".cmake/x86.cmake", "Substitute": true },
+      { "FileName": ".cmake/sources.generated.cmake", "Substitute": true },
+      { "FileName": ".vscode/launch.json", "Substitute": true },
+      { "FileName": ".vscode/settings.json", "Substitute": true },
+      { "FileName": ".vscode/tasks.json", "Substitute": true },
+      { "FileName": "src/main.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "bin/$safeprojectname$", "Platforms": ["Linux"], "Executable": true }
     ]
   },
   {
     "Name": "CppWin32",
-    "FileName": "cpp.win32.project.zip",
+    "FileName": "cpp.gui.win32.project.zip",
     "Langage":  "cpp",
-    "Type":  "Win32",
+    "Type":  "GUI",
+    "Platforms": ["Windows"],
     "Files": [
       { "FileName": "CMakeLists.txt", "Substitute": true },
-      { "FileName": "Desktop.ico", "Substitute": false },
-      { "FileName": "Win32.vcxproj", "Substitute": true },
-      { "FileName": "Win32.vcxproj.filters", "Substitute": true },
+      { "FileName": "Win32.ico", "Substitute": false },
+      { "FileName": "Win32.vcxproj", "TargetFileName":"$safeprojectname$.vcxproj", "Substitute": true },
+      { "FileName": "Win32.vcxproj.filters", "TargetFileName":"$safeprojectname$.vcxproj.filters", "Substitute": true },
       { "FileName": "Win32.vstemplate", "Substitute": true },
       { "FileName": "CppWin32.csproj", "Substitute": true },
       { "FileName": "build.bat", "Substitute": true },
       { "FileName": "build.sh", "Substitute": true },
-      { "FileName": ".cmake\\sources.generated.cmake", "Substitute": true },
-      { "FileName": ".vscode\\launch.json", "Substitute": true },
-      { "FileName": ".vscode\\settings.json", "Substitute": true },
-      { "FileName": ".vscode\\tasks.json", "Substitute": true },
-      { "FileName": "src\\winmain.cpp", "Substitute": true }
+      { "FileName": ".cmake/sources.generated.cmake", "Substitute": true },
+      { "FileName": ".vscode/launch.json", "Substitute": true },
+      { "FileName": ".vscode/settings.json", "Substitute": true },
+      { "FileName": ".vscode/tasks.json", "Substitute": true },
+      { "FileName": "src/winmain.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "bin/$safeprojectname$.exe", "Platforms": ["Windows"], "Executable": false },
+      { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] }
+    ]
+  },
+  {
+    "Name": "CppLinuxQt",
+    "FileName": "cpp.gui.qt.project.zip",
+    "Langage":  "cpp",
+    "Type":  "GUI",
+    "Platforms": ["Linux"],
+    "Files": [
+      { "FileName": "CMakeLists.txt", "Substitute": true },
+      { "FileName": "Qt.ico", "Substitute": false },
+      { "FileName": "Qt.vcxproj", "TargetFileName":"$safeprojectname$.vcxproj", "Substitute": true },
+      { "FileName": "Qt.vcxproj.filters", "TargetFileName":"$safeprojectname$.vcxproj.filters", "Substitute": true },
+      { "FileName": "Qt.vstemplate", "Substitute": true },
+      { "FileName": "CppLinuxQt.csproj", "Substitute": true },
+      { "FileName": "build.sh", "Substitute": true },
+      { "FileName": ".cmake/aarch64.cmake", "Substitute": true },
+      { "FileName": ".cmake/arm.cmake", "Substitute": true },
+      { "FileName": ".cmake/x64.cmake", "Substitute": true },
+      { "FileName": ".cmake/x86.cmake", "Substitute": true },
+      { "FileName": ".cmake/sources.generated.cmake", "Substitute": true },
+      { "FileName": ".vscode/launch.json", "Substitute": true },
+      { "FileName": ".vscode/settings.json", "Substitute": true },
+      { "FileName": ".vscode/tasks.json", "Substitute": true },
+      { "FileName": "src/qtmain.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "bin/$safeprojectname$", "Platforms": ["Linux"], "Executable": false }
+    ]
+  },
+  {
+    "Name": "CppLinuxGtk",
+    "FileName": "cpp.gui.gtk.project.zip",
+    "Langage":  "cpp",
+    "Type":  "GUI",
+    "Platforms": ["Linux"],
+    "Files": [
+      { "FileName": "CMakeLists.txt", "Substitute": true },
+      { "FileName": "Gtk.ico", "Substitute": false },
+      { "FileName": "Gtk.vcxproj", "TargetFileName":"$safeprojectname$.vcxproj", "Substitute": true },
+      { "FileName": "Gtk.vcxproj.filters", "TargetFileName":"$safeprojectname$.vcxproj.filters", "Substitute": true },
+      { "FileName": "Gtk.vstemplate", "Substitute": true },
+      { "FileName": "CppLinuxGtk.csproj", "Substitute": true },
+      { "FileName": "build.sh", "Substitute": true },
+      { "FileName": ".cmake/aarch64.cmake", "Substitute": true },
+      { "FileName": ".cmake/arm.cmake", "Substitute": true },
+      { "FileName": ".cmake/x64.cmake", "Substitute": true },
+      { "FileName": ".cmake/x86.cmake", "Substitute": true },
+      { "FileName": ".cmake/sources.generated.cmake", "Substitute": true },
+      { "FileName": ".vscode/launch.json", "Substitute": true },
+      { "FileName": ".vscode/settings.json", "Substitute": true },
+      { "FileName": ".vscode/tasks.json", "Substitute": true },
+      { "FileName": "src/gtkmain.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "bin/$safeprojectname$", "Platforms": ["Linux"], "Executable": false }
     ]
   },
   {
@@ -47,21 +142,60 @@
     "Langage":  "cpp",
     "Type": "Module",
     "HostName": "CppModuleHost",
+    "Platforms": [ "Windows", "Linux" ],
     "Files": [
       { "FileName": "CMakeLists.txt", "Substitute": true },
       { "FileName": "CppModule.csproj", "Substitute": true },
       { "FileName": "build.bat", "Substitute": true },
       { "FileName": "build.sh", "Substitute": true },
       { "FileName": "Module.ico", "Substitute": true },
-      { "FileName": "Module.vcxproj", "Substitute": true },
-      { "FileName": "Module.vcxproj.filters", "Substitute": true },
+      { "FileName": "Module.vcxproj", "TargetFileName":"$safeprojectname$.vcxproj", "Substitute": true },
+      { "FileName": "Module.vcxproj.filters", "TargetFileName":"$safeprojectname$.vcxproj.filters", "Substitute": true },
       { "FileName": "Module.vstemplate", "Substitute": true },
-      { "FileName": ".cmake\\sources.generated.cmake", "Substitute": true },
-      { "FileName": ".vscode\\launch.json", "Substitute": true },
-      { "FileName": ".vscode\\settings.json", "Substitute": true },
-      { "FileName": ".vscode\\tasks.json", "Substitute": true },
-      { "FileName": "include\\module.h", "Substitute": true },
-      { "FileName": "src\\module.cpp", "Substitute": true }
+      { "FileName": ".cmake/sources.generated.cmake", "Substitute": true },
+      { "FileName": ".vscode/launch.json", "Substitute": true },
+      { "FileName": ".vscode/settings.json", "Substitute": true },
+      { "FileName": ".vscode/tasks.json", "Substitute": true },
+      { "FileName": "include/module.h", "Substitute": true },
+      { "FileName": "src/module.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "bin/$safeprojectname$.dll", "Platforms": ["Windows"], "Executable": true },
+      { "FileName": "bin/lib$safeprojectname$.so", "Platforms": ["Linux"], "Executable": true },
+      { "FileName": "bin/$safeprojectname$.pdb", "Platforms": ["Windows"] },
+      { "FileName": "lib/$safeprojectname$.lib", "Platforms": ["Windows"] },
+      { "FileName": "include/module.h", "Platforms": ["Windows", "Linux"] }
+    ]
+  },
+  {
+    "Name": "CppLinuxModule",
+    "FileName": "cpp.module.linux.project.zip",
+    "Langage":  "cpp",
+    "Type":  "Module",
+    "HostName": "CppModuleHost",
+    "Platforms": [ "Linux" ],
+    "Files": [
+      { "FileName": "CMakeLists.txt", "Substitute": true },
+      { "FileName": "CppLinuxModule.csproj", "Substitute": true },
+      { "FileName": "build.sh", "Substitute": true },
+      { "FileName": "LinuxModule.ico", "Substitute": false },
+      { "FileName": "LinuxModule.vcxproj", "TargetFileName":"$safeprojectname$.vcxproj", "Substitute": true },
+      { "FileName": "LinuxModule.vcxproj.filters", "TargetFileName":"$safeprojectname$.vcxproj.filters", "Substitute": true },
+      { "FileName": "LinuxModule.vstemplate", "Substitute": true },
+      { "FileName": ".cmake/aarch64.cmake", "Substitute": true },
+      { "FileName": ".cmake/arm.cmake", "Substitute": true },
+      { "FileName": ".cmake/x64.cmake", "Substitute": true },
+      { "FileName": ".cmake/x86.cmake", "Substitute": true },
+      { "FileName": ".cmake/sources.generated.cmake", "Substitute": true },
+      { "FileName": ".vscode/launch.json", "Substitute": true },
+      { "FileName": ".vscode/settings.json", "Substitute": true },
+      { "FileName": ".vscode/tasks.json", "Substitute": true },
+      { "FileName": "include/module.h", "Substitute": true },
+      { "FileName": "src/module.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "bin/lib$safeprojectname$.so", "Platforms": ["Linux"], "Executable": true },
+      { "FileName": "include/module.h", "Platforms": ["Linux"] }
     ]
   },
   {
@@ -70,21 +204,58 @@
     "Langage":  "cpp",
     "Type": "Library",
     "HostName": "CppLibraryHost",
+    "Platforms": [ "Windows", "Linux" ],
     "Files": [
       { "FileName": "CMakeLists.txt", "Substitute": true },
       { "FileName": "CppLibrary.csproj", "Substitute": true },
       { "FileName": "build.bat", "Substitute": true },
       { "FileName": "build.sh", "Substitute": true },
       { "FileName": "Library.ico", "Substitute": true },
-      { "FileName": "Library.vcxproj", "Substitute": true },
-      { "FileName": "Library.vcxproj.filters", "Substitute": true },
+      { "FileName": "Library.vcxproj", "TargetFileName":"$safeprojectname$.vcxproj", "Substitute": true },
+      { "FileName": "Library.vcxproj.filters", "TargetFileName":"$safeprojectname$.vcxproj.filters", "Substitute": true },
       { "FileName": "Library.vstemplate", "Substitute": true },
-      { "FileName": ".cmake\\sources.generated.cmake", "Substitute": true },
-      { "FileName": ".vscode\\launch.json", "Substitute": true },
-      { "FileName": ".vscode\\settings.json", "Substitute": true },
-      { "FileName": ".vscode\\tasks.json", "Substitute": true },
-      { "FileName": "include\\library.h", "Substitute": true },
-      { "FileName": "src\\library.cpp", "Substitute": true }
+      { "FileName": ".cmake/sources.generated.cmake", "Substitute": true },
+      { "FileName": ".vscode/launch.json", "Substitute": true },
+      { "FileName": ".vscode/settings.json", "Substitute": true },
+      { "FileName": ".vscode/tasks.json", "Substitute": true },
+      { "FileName": "include/library.h", "Substitute": true },
+      { "FileName": "src/library.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "lib/$safeprojectname$.lib", "Platforms": ["Windows"] },
+      { "FileName": "lib/lib$safeprojectname$.a", "Platforms": ["Linux"] },
+      { "FileName": "include/library.h", "Platforms": ["Windows", "Linux"] }
+    ]
+  },
+  {
+    "Name": "CppLinuxLibrary",
+    "FileName": "cpp.library.linux.project.zip",
+    "Langage":  "cpp",
+    "Type":  "Library",
+    "HostName": "CppLibraryHost",
+    "Platforms": [ "Linux" ],
+    "Files": [
+      { "FileName": "CMakeLists.txt", "Substitute": true },
+      { "FileName": "CppLinuxLibrary.csproj", "Substitute": true },
+      { "FileName": "build.sh", "Substitute": true },
+      { "FileName": "LinuxLibrary.ico", "Substitute": false },
+      { "FileName": "LinuxLibrary.vcxproj", "TargetFileName":"$safeprojectname$.vcxproj", "Substitute": true },
+      { "FileName": "LinuxLibrary.vcxproj.filters", "TargetFileName":"$safeprojectname$.vcxproj.filters", "Substitute": true },
+      { "FileName": "LinuxLibrary.vstemplate", "Substitute": true },
+      { "FileName": ".cmake/aarch64.cmake", "Substitute": true },
+      { "FileName": ".cmake/arm.cmake", "Substitute": true },
+      { "FileName": ".cmake/x64.cmake", "Substitute": true },
+      { "FileName": ".cmake/x86.cmake", "Substitute": true },
+      { "FileName": ".cmake/sources.generated.cmake", "Substitute": true },
+      { "FileName": ".vscode/launch.json", "Substitute": true },
+      { "FileName": ".vscode/settings.json", "Substitute": true },
+      { "FileName": ".vscode/tasks.json", "Substitute": true },
+      { "FileName": "include/library.h", "Substitute": true },
+      { "FileName": "src/library.cpp", "Substitute": true }
+    ],
+    "BuiltFiles": [
+      { "FileName": "lib/lib$safeprojectname$.a", "Platforms": ["Linux"] },
+      { "FileName": "include/library.h", "Platforms": ["Linux"] }
     ]
   }
 ]

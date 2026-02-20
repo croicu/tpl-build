@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Croicu.Templates.Test.Core
@@ -26,17 +27,15 @@ namespace Croicu.Templates.Test.Core
                 throw new DirectoryNotFoundException($"Staging folder not found: '{stagingDir}'");
 
             Directory.CreateDirectory(destDir);
-            var substitutions = new Dictionary<string, string>
-            {
-                { "safeprojectname",    projectName},
-                { "installpath",        getInstallPath()}
-            };
 
             foreach (TemplateFileInfo fileInfo in templateFiles)
             {
                 var srcFilePath = Path.Combine(stagingDir, fileInfo.FileName);
-                var destFilePath = Path.Combine(destDir, fileInfo.FileName);
+                var destFilePath = Path.Combine(destDir, fileInfo.TargetFileName);
                 var destFileDir = Path.GetDirectoryName(destFilePath);
+
+                if (!File.Exists(srcFilePath))
+                    throw new FileNotFoundException($"Template file not found: '{srcFilePath}'");
 
                 if (!string.IsNullOrEmpty(destFileDir))
                     Directory.CreateDirectory(destFileDir);
@@ -44,7 +43,7 @@ namespace Croicu.Templates.Test.Core
                 if (fileInfo.Substitute)
                 {
                     var text = ReadAll(srcFilePath);
-                    var substituted = ApplySubstitutions(text, substitutions);
+                    var substituted = Substitute(text);
 
                     WriteAll(destFilePath, substituted);
                 }
@@ -57,41 +56,52 @@ namespace Croicu.Templates.Test.Core
 
         static string? installPath = null;
 
-        private static string getInstallPath()
+        private static string? GetInstallPath()
         {
-            const string wswhere = @"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe";
-            const string arguments = "-latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath";
-
-            if (installPath == null)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                int exitCode;
-                string stdout;
-                string stderr;
+                const string wswhere = @"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe";
+                const string arguments = "-latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath";
 
-                try
+                if (installPath == null)
                 {
-                    exitCode = Executor.Execute(wswhere, arguments, string.Empty, out stdout, out stderr);
-                }
-                catch (Exception ex)
-                {
-                    throw new FileNotFoundException("Vswhere not found.", ex);
-                }
+                    int exitCode;
+                    string stdout;
+                    string stderr;
 
-                if (exitCode != 0)
-                {
-                    throw new ApplicationException($"Vswhere error.\n[STDOUT] {stdout}.\n[STDERR] {stderr}.\n");
-                }
+                    try
+                    {
+                        exitCode = Executor.Execute(wswhere, arguments, string.Empty, null, out stdout, out stderr);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new FileNotFoundException("Vswhere not found.", ex);
+                    }
 
-                installPath = stdout.TrimEnd() + @"\Common7\IDE\";
+                    if (exitCode != 0)
+                    {
+                        throw new ApplicationException($"Vswhere error.\n[STDOUT] {stdout}.\n[STDERR] {stderr}.\n");
+                    }
+
+                    installPath = stdout.TrimEnd() + @"\Common7\IDE\";
+                }
             }
 
             return installPath;
         }
 
-        private static string ApplySubstitutions(string input, IReadOnlyDictionary<string, string> substitutions)
+        internal static string Substitute(string input)
         {
-            if (substitutions.Count == 0)
-                return input;
+            if (string.IsNullOrEmpty(Context.Current.TestTemplate))
+            {
+                throw new ApplicationException($"Current.TestTemplate not initialized.\n");
+            }
+
+            var substitutions = new Dictionary<string, string?>
+            {
+                { "safeprojectname",    Context.Current.TestTemplate},
+                { "installpath",        GetInstallPath()}
+            };
 
             var output = input;
             foreach (var kv in substitutions)
@@ -118,7 +128,6 @@ namespace Croicu.Templates.Test.Core
 
         private static string ReadAll(string path)
         {
-            // detectEncodingFromByteOrderMarks preserves UTF-8/UTF-16/UTF-32 BOM detection.
             using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             using var sr = new StreamReader(fs, Encoding.ASCII);
 
@@ -129,7 +138,6 @@ namespace Croicu.Templates.Test.Core
 
         private static void WriteAll(string path, string text)
         {
-            // Preserve detected encoding. StreamWriter will emit BOM if the encoding uses one.
             using var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
             using var sw = new StreamWriter(fs, Encoding.ASCII);
 
