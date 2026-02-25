@@ -1,129 +1,146 @@
 # .build/Zip.cmake
-# Generic helpers to zip “payload folders as data” using: cmake -E tar --format=zip
+# Zip “payload folders as data” using: cmake -E tar --format=zip
+#
+# Public API:
+#   templates_add_payload_zip(TEMPLATE_SOURCE_DIR <rel> TARGET_ALIAS <name>)
+#   templates_write_manifest(<out_file>)
 #
 # Conventions:
-# - You call templates_zip_init(PACK_NAME <...> OUT_BUILD_ROOT <var> [AGGREGATE_TARGET <tgt>])
-# - You call templates_add_payload_zip(REL_DIR <...> BUILD_ROOT <...> [TARGET_PREFIX <...>])
-#
-# REL_DIR is relative to the caller CMakeLists.txt directory (dispatcher-friendly).
-# Zip contains the *contents* of the payload folder, not the folder itself.
+# - TEMPLATE_SOURCE_DIR is relative to the caller CMakeLists.txt directory.
+# - Zip contains the *contents* of the payload folder, not the folder itself.
+# - A single aggregate target is created automatically: templates_zip (ALL)
+# - Output ZIPs go under: ${CMAKE_BINARY_DIR}/templates/
+# - install() goes to: templates/
 
-function(templates_zip_init)
-  set(oneValueArgs PACK_NAME OUT_BUILD_ROOT AGGREGATE_TARGET)
-  cmake_parse_arguments(TZI "" "${oneValueArgs}" "" ${ARGN})
+function(_templates_zip_ensure_init)
+    # Aggregate target for all template ZIPs.
+    if(NOT TARGET templates_zip)
+        add_custom_target(templates_zip ALL)
+    endif()
 
-  if(NOT TZI_PACK_NAME)
-    message(FATAL_ERROR "templates_zip_init: PACK_NAME is required")
-  endif()
-  if(NOT TZI_OUT_BUILD_ROOT)
-    message(FATAL_ERROR "templates_zip_init: OUT_BUILD_ROOT (var name) is required")
-  endif()
+    # Where we emit ZIPs.
+    if(NOT DEFINED TEMPLATES_ZIP_BUILD_ROOT)
+        set(TEMPLATES_ZIP_BUILD_ROOT "${CMAKE_BINARY_DIR}/templates" CACHE PATH
+            "Build output root for template ZIPs")
+    endif()
 
-  # Default aggregate target name: <pack>_templates_zip
-  set(_agg "${TZI_PACK_NAME}_templates_zip")
-  if(TZI_AGGREGATE_TARGET)
-    set(_agg "${TZI_AGGREGATE_TARGET}")
-  endif()
-
-  if(NOT TARGET ${_agg})
-    add_custom_target(${_agg})
-  endif()
-
-  # Produce ZIPs under the TOP build tree (works well with add_subdirectory).
-  # e.g. build/x64/Debug/templates/cpp/...
-  set(_build_root "${CMAKE_BINARY_DIR}/templates/${TZI_PACK_NAME}")
-
-  set(${TZI_OUT_BUILD_ROOT} "${_build_root}" PARENT_SCOPE)
-  set(TEMPLATES_ZIP_AGGREGATE_TARGET "${_agg}" PARENT_SCOPE)
+    set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_IDS    "${internal_id}")
+    set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_NAMES  "${user_name}")
+    set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_ASSETS "${zip_name}")
 endfunction()
 
 function(templates_add_payload_zip)
-  set(oneValueArgs PACK_NAME REL_DIR BUILD_ROOT TARGET_PREFIX AGGREGATE_TARGET)
-  cmake_parse_arguments(TAPZ "" "${oneValueArgs}" "" ${ARGN})
+    set(oneValueArgs TEMPLATE_SOURCE_DIR TARGET_ALIAS)
+    cmake_parse_arguments(TAPZ "" "${oneValueArgs}" "" ${ARGN})
 
-  if(NOT TAPZ_PACK_NAME)
-    message(FATAL_ERROR "templates_add_payload_zip: PACK_NAME is required")
-  endif()
-  if(NOT TAPZ_REL_DIR)
-    message(FATAL_ERROR "templates_add_payload_zip: REL_DIR is required")
-  endif()
-  if(NOT TAPZ_BUILD_ROOT)
-    message(FATAL_ERROR "templates_add_payload_zip: BUILD_ROOT is required")
-  endif()
+    if(NOT TAPZ_TEMPLATE_SOURCE_DIR)
+        message(FATAL_ERROR "templates_add_payload_zip: TEMPLATE_SOURCE_DIR is required")
+    endif()
 
-  # Aggregate target (optional; defaults to what templates_zip_init() published)
-  set(_agg "${TEMPLATES_ZIP_AGGREGATE_TARGET}")
-  if(TAPZ_AGGREGATE_TARGET)
-    set(_agg "${TAPZ_AGGREGATE_TARGET}")
-  endif()
+    _templates_zip_ensure_init()
 
-  # Payload folder is data; resolve relative to the calling CMakeLists.txt
-  set(payload_root "${CMAKE_CURRENT_LIST_DIR}/${TAPZ_REL_DIR}")
-  if(NOT IS_DIRECTORY "${payload_root}")
-    message(FATAL_ERROR "Template payload root not found: ${payload_root}")
-  endif()
+    # Resolve payload folder relative to the calling CMakeLists.txt
+    set(payload_root "${CMAKE_CURRENT_LIST_DIR}/${TAPZ_TEMPLATE_SOURCE_DIR}")
+    if(NOT IS_DIRECTORY "${payload_root}")
+        message(FATAL_ERROR "Template payload root not found: ${payload_root}")
+    endif()
 
-  # Track payload files for incremental rebuilds.
-  # CONFIGURE_DEPENDS forces CMake to re-run when files are added/removed.
-  file(GLOB_RECURSE _payload_files CONFIGURE_DEPENDS
-    "${payload_root}/*"
-  )
+    set(internal_id "${TAPZ_TEMPLATE_SOURCE_DIR}")
+    file(TO_CMAKE_PATH "${internal_id}" internal_id)
+    string(REPLACE "/" "-" internal_id "${internal_id}")
 
-  # "console/project" -> "console.project"
-  string(REPLACE "/" "." rel_dotted "${TAPZ_REL_DIR}")
+    if(NOT internal_id MATCHES "^[A-Za-z0-9_-]+$")
+        message(FATAL_ERROR
+            "Invalid internal id '${internal_id}' derived from '${TAPZ_TEMPLATE_SOURCE_DIR}'")
+    endif()
 
-  # Final filename: <pack>.<rel_dotted>.zip  e.g. cpp.console.project.zip
-  set(zip_name "${TAPZ_PACK_NAME}.${rel_dotted}.zip")
-  set(zip_out_dir "${TAPZ_BUILD_ROOT}")
-  set(zip_out     "${zip_out_dir}/${zip_name}")
-  
-  # Target naming
-  set(prefix "template_zip")
-  if(TAPZ_TARGET_PREFIX)
-    set(prefix "${TAPZ_TARGET_PREFIX}")
-  endif()
-  string(REPLACE "/" "." _safe_rel "${TAPZ_REL_DIR}")
-  set(tgt "${prefix}.${TAPZ_PACK_NAME}.${_safe_rel}")
+    set(user_name "_")
+    if(TAPZ_TARGET_ALIAS)
+        set(user_name "${TAPZ_TARGET_ALIAS}")
 
-  add_custom_command(
-    OUTPUT "${zip_out}"
-    COMMAND "${CMAKE_COMMAND}" -E make_directory "${zip_out_dir}"
-    COMMAND "${CMAKE_COMMAND}" -E rm -f "${zip_out}"
-    COMMAND "${CMAKE_COMMAND}" -E tar cf "${zip_out}" --format=zip -- .
-    WORKING_DIRECTORY "${payload_root}"
-    DEPENDS ${_payload_files}
-    VERBATIM
-  )
+        if(NOT user_name MATCHES "^[A-Za-z0-9_-]+$")
+            message(FATAL_ERROR "Invalid TARGET_ALIAS '${user_name}'")
+        endif()
+    endif()
 
-  add_custom_target("${tgt}" DEPENDS "${zip_out}")
+    # Track payload files for incremental rebuilds.
+    file(GLOB_RECURSE _payload_files CONFIGURE_DEPENDS
+        "${payload_root}/*"
+    )
 
-  if(_agg AND TARGET ${_agg})
-    add_dependencies("${_agg}" "${tgt}")
-  endif()
+    # Enforce unique internal_id inside this build.
+    get_property(_aliases GLOBAL PROPERTY TPL_MANIFEST_ALIASES)
+    if(_aliases)
+        list(FIND _aliases "${internal_id}" _alias_idx)
+        if(NOT _alias_idx EQUAL -1)
+            message(FATAL_ERROR "Duplicate name '${internal_id}' (collision)")
+        endif()
+    endif()
 
-  get_filename_component(_zip_name "${zip_out}" NAME)   # zip_out = full path to zip output
-  set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_URLS "${_zip_name}")
+    set(zip_name    "${PROJECT_NAME}-${internal_id}.zip")
+    set(zip_out_dir "${TEMPLATES_ZIP_BUILD_ROOT}")
+    set(zip_out     "${zip_out_dir}/${zip_name}")
 
-  # Install: <prefix>/templates/<zip_name>
-  install(FILES "${zip_out}" DESTINATION "templates")
+    set(tgt "template_zip.${internal_id}")
+
+    add_custom_command(
+        OUTPUT "${zip_out}"
+        COMMAND "${CMAKE_COMMAND}" -E make_directory "${zip_out_dir}"
+        COMMAND "${CMAKE_COMMAND}" -E rm -f "${zip_out}"
+        COMMAND "${CMAKE_COMMAND}" -E tar cf "${zip_out}" --format=zip -- .
+        WORKING_DIRECTORY "${payload_root}"
+        DEPENDS ${_payload_files}
+        VERBATIM
+    )
+
+    add_custom_target("${tgt}" DEPENDS "${zip_out}")
+    add_dependencies(templates_zip "${tgt}")
+
+    install(FILES "${zip_out}" DESTINATION "templates")
+
+    set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_ALIASES "${internal_id}")
+    set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_ASSETS  "${zip_name}")
+    set_property(GLOBAL APPEND PROPERTY TPL_MANIFEST_NAMES   "${user_name}")
 endfunction()
 
 function(templates_write_manifest out_file)
-  get_property(_urls GLOBAL PROPERTY TPL_MANIFEST_URLS)
-  if(NOT _urls)
-    message(FATAL_ERROR "templates_write_manifest: no zips were registered")
-  endif()
-
-  file(WRITE "${out_file}" "{\n  \"assets\": [\n")
-
-  set(_first TRUE)
-  foreach(u IN LISTS _urls)
-    if(NOT _first)
-      file(APPEND "${out_file}" ",\n")
+    if(NOT out_file)
+        message(FATAL_ERROR "templates_write_manifest: out_file is required")
     endif()
-    file(APPEND "${out_file}" "    {\"url\": \"${u}\"}")
-    set(_first FALSE)
-  endforeach()
 
-  file(APPEND "${out_file}" "\n  ]\n}\n")
+    get_property(_aliases GLOBAL PROPERTY TPL_MANIFEST_ALIASES)
+    get_property(_assets  GLOBAL PROPERTY TPL_MANIFEST_ASSETS)
+    get_property(_names   GLOBAL PROPERTY TPL_MANIFEST_NAMES)
+
+    list(LENGTH _aliases _n_aliases)
+    list(LENGTH _assets  _n_assets)
+    list(LENGTH _names   _n_names)
+    if(NOT _n_aliases EQUAL _n_assets OR NOT _n_aliases EQUAL _n_names)
+        message(FATAL_ERROR "templates_write_manifest: internal manifest lists are inconsistent")
+    endif()
+
+    file(WRITE  "${out_file}" "{\n")
+    file(APPEND "${out_file}" "  \"schema\": 1,\n")
+    file(APPEND "${out_file}" "  \"templates\": [\n")
+
+    set(_first TRUE)
+    math(EXPR _last "${_n_aliases} - 1")
+    foreach(_template RANGE 0 ${_last})
+        list(GET _aliases ${_template} alias)
+        list(GET _assets  ${_template} asset)
+        list(GET _names   ${_template} name)
+
+        if(NOT _first)
+            file(APPEND "${out_file}" ",\n")
+        endif()
+
+        if(name AND NOT name STREQUAL "_")
+            file(APPEND "${out_file}" "    {\"asset\": \"${asset}\", \"name\": \"${name}\"}")
+        else()
+            file(APPEND "${out_file}" "    {\"asset\": \"${asset}\"}")
+        endif()
+        set(_first FALSE)
+    endforeach()
+
+    file(APPEND "${out_file}" "\n  ]\n}\n")
 endfunction()
