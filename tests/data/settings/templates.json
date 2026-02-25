@@ -1,7 +1,7 @@
 [
   {
     "Name": "CppConsole",
-    "FileName": "cpp.console.project.zip",
+    "FileName": "cpp-console-project.zip",
     "Langage":  "cpp",
     "Type":  "Console",
     "Platforms": [ "Windows", "Linux" ],
@@ -28,7 +28,7 @@
   },
   {
     "Name": "CppLinuxConsole",
-    "FileName": "cpp.console.linux.project.zip",
+    "FileName": "cpp-console-linux-project.zip",
     "Langage":  "cpp",
     "Type":  "Console",
     "Platforms": [ "Linux" ],
@@ -56,7 +56,7 @@
   },
   {
     "Name": "CppWin32",
-    "FileName": "cpp.gui.win32.project.zip",
+    "FileName": "cpp-gui-win32-project.zip",
     "Langage":  "cpp",
     "Type":  "GUI",
     "Platforms": ["Windows"],
@@ -82,7 +82,7 @@
   },
   {
     "Name": "CppLinuxQt",
-    "FileName": "cpp.gui.qt.project.zip",
+    "FileName": "cpp-gui-qt-project.zip",
     "Langage":  "cpp",
     "Type":  "GUI",
     "Platforms": ["Linux"],
@@ -110,7 +110,7 @@
   },
   {
     "Name": "CppLinuxGtk",
-    "FileName": "cpp.gui.gtk.project.zip",
+    "FileName": "cpp-gui-gtk-project.zip",
     "Langage":  "cpp",
     "Type":  "GUI",
     "Platforms": ["Linux"],
@@ -138,7 +138,7 @@
   },
   {
     "Name": "CppModule",
-    "FileName": "cpp.module.project.zip",
+    "FileName": "cpp-module-project.zip",
     "Langage":  "cpp",
     "Type": "Module",
     "HostName": "CppModuleHost",
@@ -169,7 +169,7 @@
   },
   {
     "Name": "CppLinuxModule",
-    "FileName": "cpp.module.linux.project.zip",
+    "FileName": "cpp-module-linux-project.zip",
     "Langage":  "cpp",
     "Type":  "Module",
     "HostName": "CppModuleHost",
@@ -200,7 +200,7 @@
   },
   {
     "Name": "CppLibrary",
-    "FileName": "cpp.library.project.zip",
+    "FileName": "cpp-library-project.zip",
     "Langage":  "cpp",
     "Type": "Library",
     "HostName": "CppLibraryHost",
@@ -229,7 +229,7 @@
   },
   {
     "Name": "CppLinuxLibrary",
-    "FileName": "cpp.library.linux.project.zip",
+    "FileName": "cpp-library-linux-project.zip",
     "Langage":  "cpp",
     "Type":  "Library",
     "HostName": "CppLibraryHost",
