@@ -36,8 +36,8 @@ case "$CONFIG" in
 esac
 
 INSTALL_DIR="out/${ARCH}/${FLAVOR}"
-[[ -d "$INSTALL_DIR" ]] || die() { echo "Install directory not found: $INSTALL_DIR" >&2; exit 1; } ;;
+[[ -d "$INSTALL_DIR" ]] || die() { echo "Install directory not found: $INSTALL_DIR" >&2; exit 1; }
 
 
-rsync "$INSTALL_DIR/manifest.json" "/$WHERE/WWW/tpl-build/" || exit 1
-rsync -r "$INSTALL_DIR/templates/" "/$WHERE/WWW/tpl-build/" || exit 1
+rsync --info=progress2 -e "ssh" "$INSTALL_DIR/manifest.json" alex@$WHERE:"/var/www/tpl-build/" || exit 1
+rsync -r --info=progress2 -e "ssh" "$INSTALL_DIR/templates/" alex@$WHERE:"/var/www/tpl-build/" || exit 1
