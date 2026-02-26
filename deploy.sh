@@ -5,7 +5,7 @@ set -euo pipefail
 # build.sh
 #
 # Usage:
-#   ./deploy.sh WHERE [debug|release] [x64|x86|arm|aarch64
+#   ./deploy.sh user@computer [debug|release] [x64|x86|arm|aarch64
 #
 # Defaults:
 #   debug x64
@@ -39,5 +39,5 @@ INSTALL_DIR="out/${ARCH}/${FLAVOR}"
 [[ -d "$INSTALL_DIR" ]] || die() { echo "Install directory not found: $INSTALL_DIR" >&2; exit 1; }
 
 
-rsync --info=progress2 -e "ssh" "$INSTALL_DIR/manifest.json" alex@$WHERE:"/var/www/tpl-build/" || exit 1
-rsync -r --info=progress2 -e "ssh" "$INSTALL_DIR/templates/" alex@$WHERE:"/var/www/tpl-build/" || exit 1
+rsync --info=progress2 -e "ssh" "$INSTALL_DIR/manifest.json" $WHERE:"/var/www/tpl-build/" || exit 1
+rsync -r --info=progress2 -e "ssh" "$INSTALL_DIR/templates/" $WHERE:"/var/www/tpl-build/" || exit 1
