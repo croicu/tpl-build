@@ -1,8 +1,7 @@
 rmdir /s /q %BUILD_DIR% 1>nul 2>nul
+rmdir /s /q %DOTNET_BUILD_DIR% 1>nul 2>nul
 rmdir /s /q %INSTALL_DIR% 1>nul 2>nul
 rmdir /s /q out\%ARCH_DIR%\test 1>nul 2>nul
-
-set "TESTS_DIR=tests"
 
 rmdir /s /q %TESTS_DIR%\dotnet\.vs 1>nul 2>nul
 rmdir /s /q %TESTS_DIR%\dotnet\TestResults 1>nul 2>nul

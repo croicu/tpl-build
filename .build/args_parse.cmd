@@ -12,6 +12,7 @@ if /i "%ARG%"=="rebuild"  set "COMMAND=rebuild"  & shift & goto :parse
 if /i "%ARG%"=="clean"    set "COMMAND=clean"    & shift & goto :parse
 if /i "%ARG%"=="zap"      set "COMMAND=zap"      & shift & goto :parse
 if /i "%ARG%"=="register" set "COMMAND=register" & shift & goto :parse
+if /i "%ARG%"=="deploy"   set "COMMAND=deploy"   & shift & goto :parse
 if /i "%ARG%"=="test"     set "COMMAND=test"     & shift & goto :parse
 
 if /i "%ARG%"=="debug"    set "FLAVOR=debug"   & shift & goto :parse

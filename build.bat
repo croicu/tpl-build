@@ -4,7 +4,7 @@ rem build.bat
 rem Usage:
 rem   build.bat [build|rebuild|test|register|clean|zap] [debug|release] [x64|x86|arm] [msvc|clang] [--cmake:"args..."] [--cmake-build:"args..."]
 rem Defaults:
-rem   build Debug x64 msvc
+rem   build debug x64 msvc
 rem ============================================================
 setlocal EnableExtensions EnableDelayedExpansion
 
@@ -20,11 +20,14 @@ call .build\args_parse.cmd %* || goto :error
 call .build\env_load.cmd || goto :error
 
 set "BUILD_DIR=build\%ARCH_DIR%\%FLAVOR%"
+set "DOTNET_BUILD_DIR=build\%ARCH_DIR%\dotnet"
 if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 set "INSTALL_DIR=out\%ARCH_DIR%\%FLAVOR%"
 if not exist "%INSTALL_DIR%" mkdir "%INSTALL_DIR%"
 set "RESULTS_DIR=logs\tests\%ARCH%\%DOTNET_CONFIG%"
 if not exist "%RESULTS_DIR%" mkdir "%RESULTS_DIR%"
+set "TESTS_DIR=tests"
+set "LOGS_DIR=logs"
 
 rem Zap
 if /i "%COMMAND%"=="zap" (
