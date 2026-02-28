@@ -77,9 +77,9 @@ function(templates_add_payload_zip)
         endif()
     endif()
 
-    set(zip_name    "${PROJECT_NAME}-${internal_id}.zip")
+    set(zip_name    "${PROJECT_NAME}-${internal_id}")
     set(zip_out_dir "${TEMPLATES_ZIP_BUILD_ROOT}")
-    set(zip_out     "${zip_out_dir}/${zip_name}")
+    set(zip_out     "${zip_out_dir}/${zip_name}.zip")
 
     set(tgt "template_zip.${internal_id}")
 
@@ -121,7 +121,7 @@ function(templates_write_manifest out_file)
 
     file(WRITE  "${out_file}" "{\n")
     file(APPEND "${out_file}" "  \"schema\": 1,\n")
-    file(APPEND "${out_file}" "  \"templates\": [\n")
+    file(APPEND "${out_file}" "  \"assets\": [\n")
 
     set(_first TRUE)
     math(EXPR _last "${_n_aliases} - 1")
@@ -134,11 +134,7 @@ function(templates_write_manifest out_file)
             file(APPEND "${out_file}" ",\n")
         endif()
 
-        if(name AND NOT name STREQUAL "_")
-            file(APPEND "${out_file}" "    {\"asset\": \"${asset}\", \"name\": \"${name}\"}")
-        else()
-            file(APPEND "${out_file}" "    {\"asset\": \"${asset}\"}")
-        endif()
+        file(APPEND "${out_file}" "    \"${asset}\"")
         set(_first FALSE)
     endforeach()
 
