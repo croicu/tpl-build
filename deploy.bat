@@ -34,8 +34,11 @@ if not exist "%INSTALL_DIR%" (
 
 rem Deploy
 if /i "%COMMAND%"=="deploy" (
-  robocopy "%INSTALL_DIR%"            "\\%WHERE%\WWW\tpl-build" manifest.json /R:0 1>nul || goto :error
-  robocopy "%INSTALL_DIR%\templates"  "\\%WHERE%\WWW\tpl-build" *.zip /R:0 1>nul || goto :error
+  robocopy "%INSTALL_DIR%"            "\\%WHERE%\WWW\tpl-build" manifest.json /R:0
+  if errorlevel 8 goto :error
+  robocopy "%INSTALL_DIR%\templates"  "\\%WHERE%\WWW\tpl-build" *.zip /R:0
+  if errorlevel 8 goto :error
+  
   echo Deployment successful.
   goto :eof
 )
