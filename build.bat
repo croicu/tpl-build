@@ -4,7 +4,7 @@ rem build.bat
 rem Usage:
 rem   build.bat [build|rebuild|test|register|clean|zap] [debug|release] [x64|x86|arm] [msvc|clang] [--cmake:"args..."] [--cmake-build:"args..."]
 rem Defaults:
-rem   build Debug x64 msvc
+rem   build debug x64 msvc
 rem ============================================================
 setlocal EnableExtensions EnableDelayedExpansion
 
