@@ -5,7 +5,6 @@ include("${PROJECT_ROOT}/.build/zip.cmake")
 
 templates_add_payload_zip(TEMPLATE_SOURCE_DIR  "console/project")
 templates_add_payload_zip(TEMPLATE_SOURCE_DIR  "console/linux/project")
-templates_add_payload_zip(TEMPLATE_SOURCE_DIR  "leetcode/project")
 templates_add_payload_zip(TEMPLATE_SOURCE_DIR  "module/project")
 templates_add_payload_zip(TEMPLATE_SOURCE_DIR  "module/linux/project")
 templates_add_payload_zip(TEMPLATE_SOURCE_DIR  "library/project")
