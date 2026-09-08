@@ -3,4 +3,5 @@
 build/
 obj/
 out/
+private/
 TestResults/

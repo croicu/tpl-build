@@ -38,7 +38,7 @@ if /i "%COMMAND%"=="deploy" (
   if errorlevel 8 goto :error
   robocopy "%INSTALL_DIR%\templates"  "\\%WHERE%\WWW\tpl-build" *.zip /R:0
   if errorlevel 8 goto :error
-  
+
   echo Deployment successful.
   goto :eof
 )
